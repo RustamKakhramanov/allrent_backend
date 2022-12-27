@@ -53,23 +53,23 @@ class PlaceTransformer extends TransformerAbstract
                 'description' => fake()->title()
             ]),
             ImageDto::make([
-                'url' => fake()->imageUrl(),
+                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
                 'description' => fake()->title()
             ]),
             ImageDto::make([
-                'url' => fake()->imageUrl(),
+                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
                 'description' => fake()->title()
             ]),
             ImageDto::make([
-                'url' => fake()->imageUrl(),
+                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
                 'description' => fake()->title()
             ]),
             ImageDto::make([
-                'url' => fake()->imageUrl(),
+                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
                 'description' => fake()->title()
             ]),
             ImageDto::make([
-                'url' => fake()->imageUrl(),
+                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
                 'description' => fake()->title()
             ]),
         ];

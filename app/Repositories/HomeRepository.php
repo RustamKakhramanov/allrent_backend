@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\DTOs\HomeDTO;
 use App\Enums\HomePageEnum;
 use App\Repositories\Company\CompanyRepository;
+use App\Repositories\Location\PlaceRepository;
 use Illuminate\Support\Collection;
 
 class HomeRepository
@@ -19,25 +20,32 @@ class HomeRepository
 
     public function __construct(HomePageEnum $type)
     {
-        $this->case = $type;
+        $this->type = $type->value;
         $this->data = collect();
     }
 
 
     public function getAllData()
     {
-
-        switch ($this->case->value) {
+        switch ($this->type) {
             case HomePageEnum::Company():
                 $this->setCompanyData();
                 break;
+            case HomePageEnum::Place():
+                $this->setPlaceData();
+                break;
         }
-    
-        return HomeDTO::make($this->data);
+
+        return HomeDTO::make([...$this->data, 'type' => $this->type]);
     }
 
-    public function setCompanyData()
+    protected function setCompanyData()
     {
         $this->data = $this->data->merge(['company' => CompanyRepository::first()]);
+    }
+
+    protected function setPlaceData()
+    {
+        $this->data = $this->data->merge(['place' => PlaceRepository::first()]);
     }
 }

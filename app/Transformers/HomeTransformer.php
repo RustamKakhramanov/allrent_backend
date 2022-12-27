@@ -16,9 +16,7 @@ class HomeTransformer extends TransformerAbstract
 
     public function transform(HomeDTO $home)
     {
-        return [
-            'type' => $home->type
-        ];
+        return $home->toArray();
     }
 
     public function includeCompany(HomeDTO $home){
