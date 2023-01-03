@@ -1,19 +1,9 @@
 <?php
 
-use App\Models\User;
-use App\Enums\TimeEnum;
-use App\Models\Record\Rent;
-use App\Models\Location\Place;
-use Illuminate\Support\Carbon;
-use App\Enums\CompanyRolesEnum;
-use App\Enums\ScheduleTypeEnum;
-use App\Models\Company\Company;
 use Illuminate\Support\Facades\Route;
-use App\Transformers\CompanyTransformer;
 use App\Http\Controllers\AllowedController;
 use App\Http\Controllers\Auth\SmsController;
 use App\Http\Controllers\Rents\RentController;
-use App\Repositories\Company\CompanyRepository;
 use App\Http\Controllers\Locations\PlacesController;
 use App\Http\Controllers\Auth\RefreshTokenController;
 use App\Http\Controllers\Auth\RegistrationController;

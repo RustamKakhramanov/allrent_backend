@@ -15,7 +15,7 @@ class CompanyTransformer extends TransformerAbstract
 
 
     protected array $availableIncludes = [
-        'places', 'members', 'owner', 'images', 'places'
+        'places', 'members', 'owner', 'images', 
     ];
 
     protected array $defaultIncludes = ['logo'];

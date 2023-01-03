@@ -10,17 +10,21 @@ class HomeTransformer extends TransformerAbstract
     
 
     protected array $availableIncludes = [
-        'companies', 'company', 'html', 
+        'companies', 'company', 'html',  'place'
     ];
 
 
     public function transform(HomeDTO $home)
     {
-        return $home->toArray();
+        return ['type' => $home->type];
     }
 
     public function includeCompany(HomeDTO $home){
         return $this->item($home->company, new CompanyTransformer);
+    }
+
+    public function includePlace(HomeDTO $home){
+        return $this->item($home->place, new PlaceTransformer);
     }
 
     public function includeCompanies(HomeDTO $home){
