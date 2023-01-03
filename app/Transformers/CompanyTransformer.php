@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\DTOs\ImageDto;
+use App\DTOs\ImageDTO;
 use App\Models\Company\Company;
 use App\Models\Location\Place;
 use App\Models\Record\Rent;
@@ -43,7 +43,7 @@ class CompanyTransformer extends TransformerAbstract
             collect([
                 url('/storage/images/first.jpg')
             ])->map(
-                fn ($item) => ImageDto::make($item)
+                fn ($item) => ImageDTO::make($item)
             ),
             new ImageTransformer
         );
@@ -52,7 +52,7 @@ class CompanyTransformer extends TransformerAbstract
     public function includeLogo(Company $company)
     {
         return $this->item(
-            ImageDto::make(['url' => url('/storage/images/first.jpg')]),
+            ImageDTO::make(['url' => url('/storage/images/first.jpg')]),
             new ImageTransformer
         );
     }

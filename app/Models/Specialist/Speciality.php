@@ -19,7 +19,7 @@ class Speciality extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'info'
+        'name', 'info', 'is_main'
     ];
 
     protected $casts = ['info' => 'array'];

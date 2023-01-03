@@ -2,7 +2,8 @@
 
 namespace App\Transformers;
 
-use App\DTOs\ImageDto;
+use App\DTOs\ImageDTO;
+use App\DTOs\RatingDTO;
 use App\Models\Location\Place;
 use League\Fractal\TransformerAbstract;
 
@@ -14,7 +15,7 @@ class PlaceTransformer extends TransformerAbstract
      * @var array
      */
     protected array $defaultIncludes = [
-        'city'
+        'city', 'rating'
     ];
 
     /**
@@ -47,175 +48,8 @@ class PlaceTransformer extends TransformerAbstract
 
     public function includeImages()
     {
-        $images = [
-            ImageDto::make([
-                'url' => url('/storage/images/first.jpg'),
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => url('/storage/images/first.jpg'),
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3738-6564-4538-a231-346133636439/9.png',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3665-3738-4534-a533-396166613738/iqos-cover1.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild3431-3938-4161-a233-616239363437/bbq-photo-5.jpeg',
-                'description' => fake()->title()
-            ]),
-            ImageDto::make([
-                'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
-                'description' => fake()->title()
-            ]),
-        ];
-
         return $this->collection(
-            collect($images),
+            ImageDTO::mock(),
             new ImageTransformer
         );
     }
@@ -253,5 +87,13 @@ class PlaceTransformer extends TransformerAbstract
     public function includeRents(Place $place)
     {
         return $place->rents ? $this->collection($place->rents, new RentTransformer()) : $this->primitive([]);
+    }
+
+    public function includeRating(Place $place)
+    {
+        return $this->item(
+            RatingDTO::mock(),
+            new RatingTransformer
+        );
     }
 }

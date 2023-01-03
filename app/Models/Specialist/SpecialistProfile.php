@@ -48,7 +48,7 @@ class SpecialistProfile extends Model
 
     public function getSpecialityAttribute()
     {
-        return $this->specialities()->wherePivot('is_main', true)->first();
+        return $this->specialities()->orderByPivot('is_main')->first();
     }
 
     public function mainSpecialty(){

@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\DTOs\ImageDto;
+use App\DTOs\ImageDTO;
 use League\Fractal\TransformerAbstract;
 
 class ImageTransformer extends TransformerAbstract
@@ -11,7 +11,7 @@ class ImageTransformer extends TransformerAbstract
         'user'
     ];
     
-    public function transform(ImageDto $image){
+    public function transform(ImageDTO $image){
         return [
             'url' => $image->url,
             'description' => $image->description
