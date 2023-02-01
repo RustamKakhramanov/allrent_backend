@@ -13,15 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('places', function (Blueprint $table) {
+        Schema::create('model_has_prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->nullable();
-            $table->foreignId('city_id')->nullable();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('address')->nullable();
-            $table->json('coordinates')->nullable();
-            $table->json('info')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('places');
+        Schema::dropIfExists('model_has_prices');
     }
 };
