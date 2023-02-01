@@ -11,13 +11,6 @@ class ImageDTO extends DTO
 
 
         if ($static) {
-            for ($i = 1; $i <= $count; $i++) {
-                $images[] = static::make([
-                    'url' =>  fake()->imageUrl(),
-                    'description' => fake()->title()
-                ]);
-            }
-        } else {
             $images = [
                 static::make([
                     'url' => url('/storage/images/first.jpg'),
@@ -99,14 +92,22 @@ class ImageDTO extends DTO
                     'url' => 'https://static.tildacdn.com/tild6362-3335-4561-a231-326137393363/r-finance-10.jpeg',
                     'description' => fake()->title()
                 ]),
-   
+
             ];
+        } else {
+            for ($i = 1; $i <= $count; $i++) {
+                $images[] = static::make([
+                    'url' =>  fake()->imageUrl(),
+                    'description' => fake()->title()
+                ]);
+            }
         }
 
         return $images;
     }
 
-    public static function mock(){
+    public static function mock()
+    {
         return collect(static::mockCollection())->first();
     }
 }
