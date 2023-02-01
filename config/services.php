@@ -35,7 +35,7 @@ return [
 
     'sms' => [
         'class' => MobizonApi::class,
-        'url' => env('SMS_API_URL'),
+        'url' => env('SMS_API_URL' ),
         'login' => env('SMS_API_LOGIN'),
         'password' => env('SMS_API_PASSWORD'),
         'key' => env('SMS_API_KEY'),
