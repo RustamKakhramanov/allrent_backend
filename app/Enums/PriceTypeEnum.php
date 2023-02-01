@@ -10,4 +10,13 @@ enum PriceTypeEnum: string
     
     case PerHour = 'per_hour';
     case Initial = 'initial';
+    case Session = 'session';
+
+    public function getName(){
+        return match($this){
+            static::PerHour => 'Час',
+            static::Initial => 'День',
+            static::Session => 'Посещение',
+        };
+    }
 }

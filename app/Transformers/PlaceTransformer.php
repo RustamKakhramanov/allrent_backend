@@ -15,7 +15,7 @@ class PlaceTransformer extends TransformerAbstract
      * @var array
      */
     protected array $defaultIncludes = [
-        'reviews_count'
+        'reviews_count', 'price'
     ];
 
     /**
@@ -48,7 +48,16 @@ class PlaceTransformer extends TransformerAbstract
     }
 
 
-    public function includeImages()
+    public function includePrice(Place $place)
+    {
+        return $place->price ? $this->item(
+            $place->price,
+            new PriceTransformer
+        ) : $this->null();
+    }
+
+
+    public function includeImages(Place $place)
     {
         return $this->collection(
             ImageDTO::mockCollection(true),

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('type')->default(PriceTypeEnum::PerHour());
             $table->string('currency')->default(CurrencyEnum::KZT());
             $table->unsignedDecimal('value');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date')->nullable();
+            $table->morphs('has_price');
             $table->timestamps();
         });
     }

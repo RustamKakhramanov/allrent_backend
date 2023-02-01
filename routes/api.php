@@ -1,9 +1,15 @@
 <?php
 
+use App\Enums\CurrencyEnum;
+use App\Enums\PriceTypeEnum;
+use App\Models\Location\Place;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AllowedController;
 use App\Http\Controllers\Auth\SmsController;
 use App\Http\Controllers\Rents\RentController;
+use App\Http\Controllers\Users\ProfileController;
+use App\Http\Controllers\Companies\InviteController;
 use App\Http\Controllers\Locations\PlacesController;
 use App\Http\Controllers\Auth\RefreshTokenController;
 use App\Http\Controllers\Auth\RegistrationController;
@@ -13,9 +19,6 @@ use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Companies\CompaniesController;
 use App\Http\Controllers\Companies\CompanySchedulesController;
-use App\Http\Controllers\Companies\InviteController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Users\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +88,9 @@ Route::group(['prefix' => 'allowed'], function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
+Route::get('/test', function(){
+    return Place::first()->toArray();
+});
 
 
 

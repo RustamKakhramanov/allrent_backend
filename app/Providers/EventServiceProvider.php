@@ -11,6 +11,8 @@ use App\Observers\ScheduleObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\GiveInitialPermissions;
+use App\Models\Record\Price;
+use App\Observers\PriceObserver;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -32,6 +34,7 @@ class EventServiceProvider extends ServiceProvider
         User::class => [UserObserver::class],
         Schedule::class => [ScheduleObserver::class],
         Rent::class => [RentObserver::class],
+        Price::class => [PriceObserver::class],
     ];
 
     /**

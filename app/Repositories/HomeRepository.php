@@ -10,8 +10,8 @@ use Illuminate\Support\Collection;
 
 class HomeRepository
 {
-    private HomePageEnum $case;
     private Collection $data;
+    protected string $type;
 
     public static function parse(HomePageEnum $type): HomeDTO
     {

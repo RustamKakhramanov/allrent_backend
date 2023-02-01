@@ -2,14 +2,16 @@
 
 namespace App\Repositories\Location;
 
+use App\Models\Location\Place;
 use App\Enums\ScheduleTypeEnum;
 use App\Repositories\Repository;
 use App\DTOs\CompletedSheduleDTO;
+use Illuminate\Database\Eloquent\Builder;
 
 class PlaceRepository extends Repository
 {
 
-    public function init($place)
+    public function init(Builder $place)
     {
         return $place;
     }
