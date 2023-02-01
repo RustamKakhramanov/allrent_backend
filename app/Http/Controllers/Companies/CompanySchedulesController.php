@@ -10,8 +10,10 @@ use App\Models\Company\PlaceSchedule;
 use App\Transformers\ScheduleTransformer;
 use App\Http\Requests\StoreScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
+use App\Repositories\Location\PlaceRepository;
 use App\Http\Requests\StorePlaceScheduleRequest;
 use App\Http\Requests\UpdatePlaceScheduleRequest;
+use App\Transformers\CompletedScheduleTransformer;
 
 class CompanySchedulesController extends Controller
 {
@@ -20,9 +22,12 @@ class CompanySchedulesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Company $company)
+    public function index(Company $company, Place $place)
     {
-        return fractal($company->allSchedules, new ScheduleTransformer);
+        return fractal(
+            PlaceRepository::getCompletedSchedule($place, request('day', now())),
+            new CompletedScheduleTransformer
+        );
     }
 
 

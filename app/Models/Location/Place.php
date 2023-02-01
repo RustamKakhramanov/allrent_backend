@@ -28,7 +28,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $name
  * @property string $description
  * @property string $address
- * @property array $cooordinates
+ * @property array $coordinates
  * @property array $info
  * @property User|null $owner
  * @property Builder|Rent [] $rents
@@ -50,12 +50,12 @@ class Place extends Model implements HasMedia
         'name',
         'description',
         'address',
-        'cooordinates',
+        'coordinates',
         'info',
         'slug'
     ];
 
-    protected $casts = ['cooordinates' => 'array', 'info' => 'array'];
+    protected $casts = ['coordinates' => 'array', 'info' => 'array'];
 
 
     public function companies()

@@ -59,12 +59,12 @@ if (!function_exists('btime_intervals')) {
         $begin = new DateTime($time_begin);
         $end = new DateTime($time_end);
 
-        $interval = new DateInterval('PT5M');
+        $interval = new DateInterval('PT30M');
         $periods = new DatePeriod($begin, $interval, $end);
 
-        $intervals = collect(iterator_to_array($periods))->map(fn (DateTime $time) => $format ? $time->format('H:i') : $time->getTimestamp());
+        $intervals = collect(iterator_to_array($periods))->map(fn (DateTime $time) => $format ? $time->format($format) : $time->getTimestamp());
 
-        $c_end = $format ? cparse($time_end)->format('H:i') : cparse($time_end)->getTimestamp();
+        $c_end = $format ? cparse($time_end)->format($format) : cparse($time_end)->getTimestamp();
 
         if ($last && $intervals->doesntContain($c_end)) {
             $intervals = $intervals->push($c_end);
@@ -84,8 +84,20 @@ if (!function_exists('to_timestamp')) {
 
 if (!function_exists('cparse')) {
     function cparse($value)
-    {
-        return Carbon::parse($value);
+    {   
+        if(request('test') === 1){
+            date_default_timezone_set('Asia/Almaty');
+
+            dd( date( 'Y,m H:i', 1662489600));
+        }
+        
+        try{
+            return Carbon::parse($value);
+
+        }catch(\Exception){
+            return Carbon::parse($value);
+
+        }
     }
 }
 

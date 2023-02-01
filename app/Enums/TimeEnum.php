@@ -34,9 +34,18 @@ enum TimeEnum: string
         };
     }
 
+    public static function defaultFormats(){
+        return ['H:i', true];
+    }
+    
     public static function getAllIntervals()
     {
-        return collect(static::cases())->mapWithKeys(fn ($enum) => [$enum->value => $enum->getTime()])->toArray();
+        return collect(static::cases())
+            ->mapWithKeys(
+                fn ($enum) => [
+                    $enum->value => call_user_func_array('btime_intervals', array_merge($enum->getIntervals(), static::defaultFormats()))
+                ]
+            )->toArray();
     }
 
     public static function getCallectWithoutParsingIntervals()

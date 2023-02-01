@@ -2,12 +2,9 @@
 
 namespace App\Repositories\Location;
 
-use Illuminate\Support\Carbon;
 use App\Enums\ScheduleTypeEnum;
-use App\Models\Location\Place;
-use App\Models\Record\Rent;
 use App\Repositories\Repository;
-use Illuminate\Support\Collection;
+use App\DTOs\CompletedSheduleDTO;
 
 class PlaceRepository extends Repository
 {
@@ -50,7 +47,6 @@ class PlaceRepository extends Repository
             return collect();
         }
 
-
         $rents = $place->rents()
             ->whereDay('scheduled_at', cparse($period))
             ->whereDay('scheduled_end_at', cparse($period))
@@ -59,12 +55,17 @@ class PlaceRepository extends Repository
                 fn ($item) => btime_intervals($item->scheduled_at, $item->scheduled_end_at, 'H:i', true)
             )->collapse();
 
-        return  collect($schedule->schedule)->map(fn ($item) => [$item => $rents->contains(date('H:i', $item))]);
+        return  collect($schedule->schedule)
+            ->map(
+                fn ($item) => CompletedSheduleDTO::make(
+                    ['time' => cparse($item), 'active' => (bool) $rents->contains($item)]
+                )
+            );
     }
 
     public static function getFreeSchedule($place, $period = null)
     {
-        return (new self)->getCompletedSchedule($place, $period ?: now())->filter(fn ($item) => array_values($item)[1] ?? false);
+        return (new self)->getCompletedSchedule($place, $period ?: now())->filter(fn (CompletedSheduleDTO $item) => !$item->active);
     }
 
     public static function getPlacesWithFreeSchedules($date)
