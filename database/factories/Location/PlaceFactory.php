@@ -26,7 +26,7 @@ class PlaceFactory extends Factory
             'slug' => fake()->slug(1),
             'description' => fake()->text(100),
             'address' => fake()->address(),
-            'cooordinates' => json_encode([
+            'coordinates' => json_encode([
                 'latitude' => fake()->latitude(),
                 'longitude' => fake()->longitude(),
             ]),

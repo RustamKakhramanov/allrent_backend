@@ -31,11 +31,11 @@ class ScheduleFactory extends Factory
             $iteration++;
             if ($iteration == $iterations) break;
         }
-
+        
         return [
             'user_id' => User::factory(),
             'company_id' => Company::factory(),
-            'schedule' => $factory_schedule,
+            'schedule' => collect($factory_schedule)->sort()->unique()->toArray(),
             'date' => fake()->dateTimeBetween('now', Carbon::now()->addMonth()),
         ];
     }

@@ -33,8 +33,6 @@ class DatabaseSeeder extends Seeder
             $this->call(RolesAndPermissionsSeeder::class);
 
             if (is_local()) {
-
-
                 $user = User::factory()
                     ->has(
                         SpecialistProfile::factory()
