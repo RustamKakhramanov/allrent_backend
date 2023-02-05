@@ -3,16 +3,18 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Review;
 use App\Models\Record\Rent;
+use App\Models\Record\Price;
 use App\Models\Record\Schedule;
 use App\Observers\RentObserver;
 use App\Observers\UserObserver;
+use App\Observers\PriceObserver;
+use App\Observers\ReviewObserver;
 use App\Observers\ScheduleObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\GiveInitialPermissions;
-use App\Models\Record\Price;
-use App\Observers\PriceObserver;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -35,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
         Schedule::class => [ScheduleObserver::class],
         Rent::class => [RentObserver::class],
         Price::class => [PriceObserver::class],
+        Review::class => [ReviewObserver::class],
     ];
 
     /**

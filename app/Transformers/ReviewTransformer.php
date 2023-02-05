@@ -16,25 +16,32 @@ class ReviewTransformer extends TransformerAbstract
     {
         return [
             'id' => $review->id,
-            'text' => $review->text,
+            'comment' => $review->comment,
+            'advantages' => $review->disadvantages,
+            'disadvantages' => $review->disadvantages,
+            'rating' => $review->rating,
+            'created_at' => $review->created_at,
         ];
     }
 
     public function includeReviewer($review)
     {
+        $profile = $review->reviewer->profiles()->first();
+
         return $this->primitive([
-            'profile_id' => $review->reviewer->id,
-            'user_id' => $review->reviewer->user_id,
-            'name' => $review->reviewer->user->name,
-            'specialty' => $review->reviewer->speciality,
+            'profile_id' => $profile->id??null,
+            'user_id' => $review->reviewer->id,
+            'name' => $review->reviewer->name,
+            'avatar' => null, //TODOO,
+            'specialty' => $profile->speciality ?? null,
         ]);
     }
 
 
-    public function includeImages()
+    public function includeImages($review)
     {
         return $this->collection(
-            ImageDTO::mock(false),
+            $review->images,
             new ImageTransformer
         );
     }

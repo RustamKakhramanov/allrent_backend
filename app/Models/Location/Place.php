@@ -2,6 +2,7 @@
 
 namespace App\Models\Location;
 
+use App\Traits\HasPrice;
 use App\Models\Record\Rent;
 use App\Enums\PriceTypeEnum;
 use App\Models\Record\Price;
@@ -9,11 +10,12 @@ use App\Models\Location\City;
 use App\Enums\ScheduleTypeEnum;
 use App\Models\Company\Company;
 use App\Models\Record\Schedule;
+use App\Models\Review;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use App\Traits\Eloquent\Sluggable;
-use App\Traits\Eloquent\Lessorable;
 
+use App\Traits\Eloquent\Lessorable;
 use App\Traits\Eloquent\ExtendedBuilds;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -45,7 +47,8 @@ class Place extends Model implements HasMedia
     use HasFactory, Lessorable, Sluggable;
     use ExtendedBuilds;
     use InteractsWithMedia;
-
+    use HasPrice;
+    
     protected $fillable = [
         'company_id',
         'city_id',
@@ -107,34 +110,7 @@ class Place extends Model implements HasMedia
         return PlaceRepository::getFreeSchedule($this, now());
     }
 
-    public function allPrices()
-    {
-        return $this->morphMany(Price::class, 'has_price');
-    }
-
-    public function prices()
-    {
-        return $this->allPrices()
-            ->where('start_date', '>=', now())
-            ->whereNull('end_date')
-            ->orWhere(function ($query) {
-                $query
-                    ->where('start_date', '>=', now())
-                    ->where('end_date', '<', now());
-            });
-    }
-
-    public function price()
-    {
-        return $this->morphOne(Price::class, 'has_price')
-            ->whereType(PriceTypeEnum::PerHour)
-            ->where('start_date', '<=', now())
-            ->whereNull('end_date')
-            ->orWhere(function ($query) {
-                $query
-                    ->whereType(PriceTypeEnum::PerHour)
-                    ->where('start_date', '<=', now())
-                    ->where('end_date', '>', now());
-            });
+    public function reviews(){
+        return $this->morphMany(Review::class, 'reviewed');
     }
 }

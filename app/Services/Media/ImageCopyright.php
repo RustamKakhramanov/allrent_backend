@@ -17,7 +17,7 @@ class ImageCopyright
      */
     private ?string $description;
 
-    public function __construct(UploadedFile $file, ?string $description)
+    public function __construct(UploadedFile $file, string $description = null)
     {
         $this->file = $file;
         $this->description = $description;
@@ -43,6 +43,6 @@ class ImageCopyright
 
     public function getCustomProperties(): array
     {
-        return ['description' => $this->description];
+        return $this->description ? ['description' => $this->description] : [];
     }
 }

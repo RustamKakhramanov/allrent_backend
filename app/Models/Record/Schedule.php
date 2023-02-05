@@ -3,6 +3,7 @@
 namespace App\Models\Record;
 
 use App\Models\User;
+use App\Traits\HasPrice;
 use App\Enums\ScheduleTypeEnum;
 use App\Models\Company\Company;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Schedule extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPrice;
 
     protected $fillable = [
         'user_id',

@@ -26,7 +26,7 @@ class CompanySchedulesController extends Controller
     {
         return fractal(
             PlaceRepository::getCompletedSchedule($place, request('day', now())),
-            new CompletedScheduleTransformer
+            new ScheduleTransformer
         );
     }
 

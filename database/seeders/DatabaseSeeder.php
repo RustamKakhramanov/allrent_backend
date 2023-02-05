@@ -16,6 +16,7 @@ use App\Enums\RolesAndPermissionsEnum;
 use App\Models\Specialist\SpecialistProfile;
 use App\Console\Commands\UserCreationCommand;
 use App\Models\Record\Schedule;
+use App\Models\Review;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DatabaseSeeder extends Seeder
@@ -49,8 +50,14 @@ class DatabaseSeeder extends Seeder
                             Schedule::factory()->state(
                                 fn ($attributes, Place $place) => ['company_id' => $place->company_id]
                             )->for($user)
+                        )->has(
+                            Review::factory()
+                                ->count(5)
+                                ->for($user, 'reviewer')
+
                         )->count(3)
                     )
+
                     ->count(3)
                     ->create();
             }

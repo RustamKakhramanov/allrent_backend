@@ -28,8 +28,12 @@ class RatingDTO extends DTO
             $review = new stdClass;
             $review->id = rand(0, 14);
             $review->reviewer = SpecialistProfile::inRandomOrder()->first();
-            $review->text = fake()->text();
-            $review->images = ImageDTO::mock(false);
+            $review->comment = fake()->text();
+            $review->advantages = fake()->text();
+            $review->disadvantages = fake()->text();
+            $review->images = ImageDTO::mockCollection(false);
+            $review->rating = rand(1,5);
+            $review->created_at = now();
             $reviews[] = $review;
         }
 

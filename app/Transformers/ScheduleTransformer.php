@@ -12,8 +12,7 @@ class ScheduleTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected array $defaultIncludes = [
-    ];
+    protected array $defaultIncludes = ['price'];
 
     /**
      * List of resources possible to include
@@ -44,11 +43,16 @@ class ScheduleTransformer extends TransformerAbstract
         return $schedule->user && user() && $this->isCanViewUser($schedule) ? $this->item($schedule->user, new UserTransformer()) : $this->null();
     }
 
+    public function includePrice(Schedule $schedule)
+    {
+        return $schedule->price ?  $this->item($schedule->price, new PriceTransformer) :  $this->null();
+    }
+
     protected function includeCompany(Schedule $schedule)
     {
         return $schedule->company ? $this->item($schedule->company, new UserTransformer()) : $this->null();
-    }  
-    
+    }
+
     protected function isCanViewUser(Schedule $schedule)
     {
         return $schedule->company && user()->isMember($schedule->company) || user()->isScheduler($schedule);

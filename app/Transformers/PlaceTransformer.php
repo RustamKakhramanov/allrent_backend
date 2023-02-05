@@ -6,6 +6,7 @@ use App\DTOs\ImageDTO;
 use App\DTOs\RatingDTO;
 use App\Models\Location\Place;
 use League\Fractal\TransformerAbstract;
+use stdClass;
 
 class PlaceTransformer extends TransformerAbstract
 {
@@ -25,7 +26,16 @@ class PlaceTransformer extends TransformerAbstract
      */
 
     protected array $availableIncludes = [
-        'companies', 'company', 'city', 'rents', 'schedules', 'completed_today_schedule', 'free_today_schedule', 'images'
+        'companies',
+        'company',
+        'city',
+        'rents',
+        'schedules',
+        'completed_today_schedule',
+        'free_today_schedule',
+        'images',
+        'reviews',
+        'abilities'
     ];
 
     /**
@@ -65,6 +75,27 @@ class PlaceTransformer extends TransformerAbstract
         );
     }
 
+
+    public function includeAbilities(Place $place)
+    {
+        $ab = [];
+
+        for ($i = 1; $i <= 20; $i++) {
+            $ab[] = (object) [
+                'id' => $i, 
+                'name' => 'Petfriendly', 
+                'icon' => fake()->imageUrl(30,30), 
+                'value' => 'У нас можно приходить с питомцами, есть посуда и корм ' .$i
+            ];
+        }
+
+        return $this->collection(
+            // $place->abilities,
+            $ab,
+            new AbilitiesTransformer
+        );
+    }
+
     public function includeCompany(Place $place)
     {
         return $place->company ? $this->item($place->company, new CompanyTransformer()) : $this->null();
@@ -92,7 +123,7 @@ class PlaceTransformer extends TransformerAbstract
 
     public function includeFreeTodaySchedule(Place $place)
     {
-        return $place->free_today_schedule ? $this->collection($place->free_today_schedule, new CompletedScheduleTransformer) : $this->null();
+        return $place->free_today_schedule ? $this->item($place->free_today_schedule, new ScheduleTransformer) : $this->null();
     }
 
     public function includeRents(Place $place)
@@ -103,7 +134,7 @@ class PlaceTransformer extends TransformerAbstract
 
     public function includeReviews(Place $place)
     {
-        return $this->collection(RatingDTO::mockReviews(), new ReviewTransformer);
+        return $this->collection($place->reviews, new ReviewTransformer);
     }
 
     public function includeReviewsCount(Place $place)

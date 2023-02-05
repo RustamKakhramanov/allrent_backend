@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Location;
 
-use App\Models\Location\Place;
 use App\Enums\ScheduleTypeEnum;
 use App\Repositories\Repository;
 use App\DTOs\CompletedSheduleDTO;
@@ -16,7 +15,7 @@ class PlaceRepository extends Repository
         return $place;
     }
 
-    public static function getCompletedSchedule($place, $period)
+    public static function getCompletedSchedule($place, $period, $free = false)
     {
         if (is_array($period)) {
             [$start, $end] = $period;
@@ -43,6 +42,7 @@ class PlaceRepository extends Repository
 
         $schedule =   $schedule_query
             ->orWhere('type',  ScheduleTypeEnum::Default())
+            ->with('price')
             ->first();
 
         if (!$schedule && !$schedule->schedules) {
@@ -57,17 +57,25 @@ class PlaceRepository extends Repository
                 fn ($item) => btime_intervals($item->scheduled_at, $item->scheduled_end_at, 'H:i', true)
             )->collapse();
 
-        return  collect($schedule->schedule)
+        $completed = collect($schedule->schedule)
             ->map(
                 fn ($item) => CompletedSheduleDTO::make(
                     ['time' => cparse($item), 'active' => (bool) $rents->contains($item)]
                 )
             );
+
+        if ($free) {
+            $completed =  $completed->filter(fn (CompletedSheduleDTO $item) => !$item->active);
+        }
+
+        $schedule->schedule = $completed->values()->toArray();
+
+        return $schedule;
     }
 
     public static function getFreeSchedule($place, $period = null)
     {
-        return (new self)->getCompletedSchedule($place, $period ?: now())->filter(fn (CompletedSheduleDTO $item) => !$item->active);
+        return (new self)->getCompletedSchedule($place, $period ?: now(), true);
     }
 
     public static function getPlacesWithFreeSchedules($date)

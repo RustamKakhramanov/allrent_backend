@@ -17,7 +17,6 @@ class HomeController extends Controller
     public function index()
     {
         $case = HomePageEnum::Place;
-       
         return fractal(
             HomeRepository::parse($case),
             new HomeTransformer

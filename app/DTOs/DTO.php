@@ -43,7 +43,7 @@ class DTO implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return json_encode(get_object_vars($this));
+        return $this->toArray();
     }
 
     public static function make($properties = [])

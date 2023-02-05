@@ -19,6 +19,9 @@ use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Companies\CompaniesController;
 use App\Http\Controllers\Companies\CompanySchedulesController;
+use App\Models\Review;
+use App\Transformers\ImageTransformer;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,8 +91,9 @@ Route::group(['prefix' => 'allowed'], function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
-Route::get('/test', function(){
-    return Place::first()->toArray();
+Route::post('/test', function(Request $request){
+    $review = Review::first();
+    return fractal($review->images, new ImageTransformer);
 });
 
 
