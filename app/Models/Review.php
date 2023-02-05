@@ -14,7 +14,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Review extends Model  implements HasMedia
 {
-    use InteractsWithMedia;
     use HasFactory;
     use Imageable;
 
@@ -33,18 +32,5 @@ class Review extends Model  implements HasMedia
     public function reviewed()
     {
         return $this->morphTo(__FUNCTION__, 'reviewed_type', 'reviewed_id');
-    }
-
-    public function registerMediaConversions(Media $media = null): void
-    {
-        $this
-            ->addMediaConversion('preview')
-            ->fit(Manipulations::FIT_CROP, 300, 300)
-            ->nonQueued();
-            
-            $this->addMediaConversion('icon')
-            ->width(50)
-            ->height(50)
-            ->sharpen(10);
     }
 }

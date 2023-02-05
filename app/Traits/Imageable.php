@@ -11,9 +11,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 trait Imageable
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia {
+        InteractsWithMedia::registerMediaConversions as parentRegisterMediaConversions;
+    }
+
     use HasAvatar;
-    
+
 
     public function saveImage($image, string $collectionName = 'default')
     {
@@ -35,8 +38,8 @@ trait Imageable
         );
     }
 
-    public function getImageAttribute(){
-
+    public function getImageAttribute()
+    {
     }
     public function getImages(string $collectionName = 'default', array|callable $filters = [])
     {
@@ -48,5 +51,20 @@ trait Imageable
         return Attribute::make(
             get: fn ($value) => $this->getImages(),
         );
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+
+        $this->addMediaConversion('preview')
+            ->width(300)
+            ->height(300)
+            ->sharpen(10);
+            
+        $this
+            ->addMediaConversion('icon')
+            ->fit(Manipulations::FIT_CROP, 50, 50)
+            ->nonQueued();
     }
 }
