@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Price extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
         'start_date',
         'end_date',
@@ -19,6 +21,4 @@ class Price extends Model
         'start_date',
         'end_date',
     ];
-
-    use HasFactory;
 }

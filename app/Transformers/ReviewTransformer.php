@@ -24,15 +24,16 @@ class ReviewTransformer extends TransformerAbstract
         ];
     }
 
+
     public function includeReviewer($review)
     {
         $profile = $review->reviewer->profiles()->first();
 
         return $this->primitive([
-            'profile_id' => $profile->id??null,
+            'profile_id' => $profile->id ?? null,
             'user_id' => $review->reviewer->id,
             'name' => $review->reviewer->name,
-            'avatar' => null, //TODOO,
+            'avatar' => $review->reviewer->avatar ?(new ImageTransformer)->transform($review->reviewer->avatar) : null, //TODOO,
             'specialty' => $profile->speciality ?? null,
         ]);
     }

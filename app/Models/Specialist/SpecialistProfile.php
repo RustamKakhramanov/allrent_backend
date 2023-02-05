@@ -3,6 +3,7 @@
 namespace App\Models\Specialist;
 
 use App\Models\User;
+use App\Traits\Imageable;
 use App\Models\Company\Company;
 use App\Traits\Eloquent\CompanySearch;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SpecialistProfile extends Model
 {
     use HasFactory, CompanySearch;
+    use Imageable;
 
     protected $fillable = ['user_id', 'company_id', 'info'];
 

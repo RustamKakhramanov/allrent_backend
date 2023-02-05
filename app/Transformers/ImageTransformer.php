@@ -21,10 +21,11 @@ class ImageTransformer extends TransformerAbstract
         }
         
         if($image instanceof \Spatie\MediaLibrary\MediaCollections\Models\Media){
+
             return [
                 'url' => $image->getFullUrl(),
-                'preview_url' => $image->getFullUrl('preview'),
-                'icon_url' => $image->getFullUrl('icon'),
+                'preview_url' => $image->hasGeneratedConversion('preview') ? $image->getFullUrl('preview') : null,
+                'icon_url' => $image->hasGeneratedConversion('icon') ? $image->getFullUrl('icon') : null,
                 'description' => $image->description
             ];
         }

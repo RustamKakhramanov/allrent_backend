@@ -15,7 +15,9 @@ trait Imageable
         InteractsWithMedia::registerMediaConversions as parentRegisterMediaConversions;
     }
 
-    use HasAvatar;
+    use HasAvatar {
+        HasAvatar::registerMediaConversions as avatarRegisterMediaConversions;
+    }
 
 
     public function saveImage($image, string $collectionName = 'default')
@@ -55,8 +57,6 @@ trait Imageable
 
     public function registerMediaConversions(Media $media = null): void
     {
-
-
         $this->addMediaConversion('preview')
             ->width(300)
             ->height(300)

@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasAvatar;
 use App\Models\Record\Rent;
 use App\Traits\ModelHasPhone;
 use App\Models\Company\Company;
 use App\Models\Record\Schedule;
 use App\Traits\ModelSearchable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -71,11 +73,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method  \Illuminate\Database\Eloquent\Collection|\App\Permission[] getAllPermissions()
  */
 
-class User extends Authenticatable
+class User extends Authenticatable  implements HasMedia
 {
     use HasRelationships, HasRoles, HasPermissions;
 
     use HasApiTokens, HasFactory, Notifiable, ModelSearchable, ModelHasPhone;
+    use HasAvatar;
 
     /**
      * The attributes that are mass assignable.
