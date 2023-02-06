@@ -22,11 +22,20 @@ trait Imageable
 
     public function saveImage($image, string $collectionName = 'default')
     {
-        $file =   $image instanceof ImageCopyright ?  $this->addMedia($image->getFile()) : $this->addMediaFromUrl($image);
+        $file =   $image instanceof ImageCopyright ?
+            $this->addMedia($image->getFile())
+            ->withCustomProperties($image->getCustomProperties())
+            :
+            $this->addMediaFromUrl($image);
 
         $file
-            ->withCustomProperties($image->getCustomProperties())
-            ->usingFileName(uniqid())
+
+            ->usingFileName(
+                $image instanceof ImageCopyright ?
+                    uniqid() . '.' . $image->getFile()->getClientOriginalExtension()
+                    :
+                    uniqid() . '.' . $image->getClientOriginalExtension()
+            )
             // ->withResponsiveImages()
             ->toMediaCollection($collectionName);
     }
@@ -58,7 +67,7 @@ trait Imageable
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('preview')
-            ->fit(Manipulations::FIT_CROP, 50, 50)
+            ->fit(Manipulations::FIT_CROP,  700, 450)
             ->nonQueued();
 
         $this
