@@ -45,17 +45,17 @@ class StoreRentRequest extends FormRequest
     {
         $validator->after(function (Validator $validator) {
             try {
-                // $from = cparse($this->scheduled_at);
-                // $to = cparse($this->scheduled_end_at);
+                $from = cparse($this->scheduled_at);
+                $to = cparse($this->scheduled_end_at);
 
-                // if (
-                //     $this->place->rents()
-                //     ->whereBetween('scheduled_at', [$from, $to])
-                //     ->orWhere(fn ($q) => $q->whereBetween('scheduled_end_at', [$from, $to]))
-                //     ->exists()
-                // ) {
-                //     $validator->errors()->add('scheduled_at', 'Is rented');
-                // }
+                if (
+                    $this->place->rents()
+                    ->whereBetween('scheduled_at', [$from, $to])
+                    ->orWhere(fn ($q) => $q->whereBetween('scheduled_end_at', [$from, $to]))
+                    ->exists()
+                ) {
+                    $validator->errors()->add('scheduled_at', 'Is rented');
+                }
             } catch (\Exception) {
                 $validator->errors()->add('scheduled_at', 'validation.rented');
             }
