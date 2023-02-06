@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Review;
+use App\Events\PlaceRent;
+use App\Events\PlaceRented;
 use App\Models\Record\Rent;
 use App\Models\Record\Price;
 use App\Models\Record\Schedule;
@@ -12,9 +14,11 @@ use App\Observers\UserObserver;
 use App\Observers\PriceObserver;
 use App\Observers\ReviewObserver;
 use App\Observers\ScheduleObserver;
+use App\Listeners\PlaceRentListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\GiveInitialPermissions;
+use App\Listeners\PlaceOwnersNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -30,6 +34,13 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             GiveInitialPermissions::class
         ],
+        // PlaceRented::class => [
+        //     PlaceRentListener::class,
+        // ],
+    ];
+
+    protected $subscribe = [
+        PlaceRentListener::class,
     ];
 
     protected $observers = [

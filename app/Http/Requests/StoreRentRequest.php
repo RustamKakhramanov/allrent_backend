@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TimeEnum;
+use App\Enums\CurrencyEnum;
 use Illuminate\Support\Carbon;
 use App\Enums\ScheduleTypeEnum;
-use App\Enums\TimeEnum;
+use App\Models\Location\Place;
 use App\Models\Record\Schedule;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -31,24 +34,30 @@ class StoreRentRequest extends FormRequest
         return [
             'specialist_profile_id' => 'exists:specialist_profiles,id',
             'detail' => 'nullable|array',
-            'scheduled_at' => 'required|timestamp',
-            'scheduled_end_at' => 'required|timestamp',
+            'amount' => 'decimal:0,4|required',
+            'currency' => [Rule::in(CurrencyEnum::toArrayCases())],
+            'scheduled_at' => 'required|date',
+            'scheduled_end_at' => 'required|date',
         ];
     }
 
     public function withValidator(Validator $validator)
     {
-
         $validator->after(function (Validator $validator) {
-            $from = Carbon::parse((int) request('scheduled_at'));
-            $to = Carbon::parse((int) request('scheduled_end_at'));
+            try {
+                // $from = cparse($this->scheduled_at);
+                // $to = cparse($this->scheduled_end_at);
 
-            if (request()->place->rents()->whereBetween('scheduled_at', [$from, $to])->exists()) {
-                $validator->errors()->add('scheduled_at', 'Scheduled_at is rented');
-            }
-
-            if (request()->place->rents()->whereBetween('scheduled_end_at', [$from, $to])->exists()) {
-                $validator->errors()->add('scheduled_end_at', 'Scheduled_end_at is rented');
+                // if (
+                //     $this->place->rents()
+                //     ->whereBetween('scheduled_at', [$from, $to])
+                //     ->orWhere(fn ($q) => $q->whereBetween('scheduled_end_at', [$from, $to]))
+                //     ->exists()
+                // ) {
+                //     $validator->errors()->add('scheduled_at', 'Is rented');
+                // }
+            } catch (\Exception) {
+                $validator->errors()->add('scheduled_at', 'validation.rented');
             }
         });
     }

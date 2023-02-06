@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('specialist_profile_id')->nullable();
             $table->string('type')->nullable();
             $table->json('detail')->nullable();
-            $table->integer('amount')->nullable();
+            $table->unsignedDecimal('amount')->nullable();
             $table->string('currency')->default('KZT');
             $table->boolean('is_paid')->default(false);
             $table->timestamp('scheduled_at');

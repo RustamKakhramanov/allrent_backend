@@ -40,8 +40,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('timestamp', function ($attribute, $value, $parameters, $validator) {;
-            return is_timestamp($value) ? :  $validator->errors()->add($attribute, "$attribute isn't timestamp");
+        Validator::extend('timestamp', function ($attribute, $value, $parameters, $validator) {
+            return is_timestamp($value);
+        });
+
+        Validator::extend('intorfloat', function($attribute, $value, $parameters, $validator) {
+            return is_integer($value) || is_float($value) || is_double($value);
         });
     }
 }

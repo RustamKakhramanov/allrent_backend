@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\PlaceRented;
 use App\Models\Record\Rent;
 
 class RentObserver
@@ -18,7 +19,7 @@ class RentObserver
      */
     public function created(Rent $rent)
     {
-        //
+        PlaceRented::dispatch($rent);
     }
 
     /**
