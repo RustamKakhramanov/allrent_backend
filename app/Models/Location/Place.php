@@ -20,6 +20,7 @@ use App\Traits\Eloquent\ExtendedBuilds;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Repositories\Location\PlaceRepository;
+use App\Traits\Imageable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -46,8 +47,8 @@ class Place extends Model implements HasMedia
 {
     use HasFactory, Lessorable, Sluggable;
     use ExtendedBuilds;
-    use InteractsWithMedia;
     use HasPrice;
+    use Imageable;
     
     protected $fillable = [
         'company_id',

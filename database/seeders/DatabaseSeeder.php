@@ -4,19 +4,20 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Console\Commands\CreateAdminCommand;
 use Throwable;
 use App\Models\User;
+use App\Models\Review;
+use App\Models\Record\Price;
 use App\Models\Location\Place;
 use App\Models\Company\Company;
+use App\Models\Record\Schedule;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Specialist\Speciality;
 use App\Enums\RolesAndPermissionsEnum;
+use App\Console\Commands\CreateAdminCommand;
 use App\Models\Specialist\SpecialistProfile;
 use App\Console\Commands\UserCreationCommand;
-use App\Models\Record\Schedule;
-use App\Models\Review;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DatabaseSeeder extends Seeder
@@ -49,7 +50,7 @@ class DatabaseSeeder extends Seeder
                         Place::factory()->has(
                             Schedule::factory()->state(
                                 fn ($attributes, Place $place) => ['company_id' => $place->company_id]
-                            )->for($user)
+                            )->has(Price::factory())->for($user)
                         )->has(
                             Review::factory()
                                 ->count(5)

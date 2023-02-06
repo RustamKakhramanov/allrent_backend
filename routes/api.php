@@ -92,7 +92,8 @@ Route::group(['prefix' => 'allowed'], function () {
 
 Route::get('/home', [HomeController::class, 'index']);
 Route::post('/test', function(Request $request){
-    $review = Review::first();
+    $review = Place::first();
+    $review->saveImages([request()->file('image')]);
     return fractal($review->images, new ImageTransformer);
 });
 

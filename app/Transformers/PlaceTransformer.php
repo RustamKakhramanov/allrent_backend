@@ -70,7 +70,7 @@ class PlaceTransformer extends TransformerAbstract
     public function includeImages(Place $place)
     {
         return $this->collection(
-            ImageDTO::mockCollection(true),
+            $place->images,
             new ImageTransformer
         );
     }
@@ -139,6 +139,6 @@ class PlaceTransformer extends TransformerAbstract
 
     public function includeReviewsCount(Place $place)
     {
-        return $this->primitive(collect(RatingDTO::mockReviews())->count());
+        return $this->primitive($place->reviews->count());
     }
 }

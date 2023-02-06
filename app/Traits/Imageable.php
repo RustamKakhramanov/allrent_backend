@@ -58,10 +58,9 @@ trait Imageable
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('preview')
-            ->width(300)
-            ->height(300)
-            ->sharpen(10);
-            
+            ->fit(Manipulations::FIT_CROP, 50, 50)
+            ->nonQueued();
+
         $this
             ->addMediaConversion('icon')
             ->fit(Manipulations::FIT_CROP, 50, 50)
