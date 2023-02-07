@@ -19,6 +19,8 @@ class PlaceRepository extends Repository
     {
         if (is_array($period)) {
             [$start, $end] = $period;
+        } else {
+            $period = cparse($period);
         }
 
         $schedule_query =  $place->schedules()
@@ -37,7 +39,7 @@ class PlaceRepository extends Repository
             [$start, $end] = $period;
             $schedule_query = $schedule_query->whereBetween('date', [cparse($start), cparse($end)]);
         } else {
-            $schedule_query = $schedule_query->whereDay('date', cparse($period));
+            $schedule_query = $schedule_query->whereDay('date', $period);
         }
 
         $schedule =   $schedule_query
@@ -50,8 +52,8 @@ class PlaceRepository extends Repository
         }
 
         $rents = $place->rents()
-            ->whereDay('scheduled_at', cparse($period))
-            ->whereDay('scheduled_end_at', cparse($period))
+            ->whereDay('scheduled_at', $period)
+            ->whereDay('scheduled_end_at', $period)
             ->get()
             ->map(
                 fn ($item) => btime_intervals($item->scheduled_at, $item->scheduled_end_at, 'H:i', true)
@@ -59,9 +61,10 @@ class PlaceRepository extends Repository
 
         $completed = collect($schedule->schedule)
             ->map(
-                fn ($item) => CompletedSheduleDTO::make(
+                fn ($item) =>
+                CompletedSheduleDTO::make(
                     ['time' => cparse($item), 'active' => (bool) $rents->contains($item)]
-                )
+                )->setActualyDate($period)
             );
 
         if ($free) {

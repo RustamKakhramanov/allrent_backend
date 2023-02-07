@@ -71,7 +71,7 @@ Route::group(['prefix' => 'companies/{company}'], function () {
     Route::middleware(['auth:api'])->group(function () {
         Route::apiResource('places', PlacesController::class);
         Route::group(['prefix' => 'places/{place}'], function () {
-            Route::apiResource('schedules', CompanySchedulesController::class);
+            Route::apiResource('schedules', CompanySchedulesController::class)->withoutMiddleware('auth:api');
             Route::apiResource('rents', RentController::class);
         });
     });

@@ -46,7 +46,7 @@ class DTO implements JsonSerializable
         return $this->toArray();
     }
 
-    public static function make($properties = [])
+    public static function make($properties = []): static
     {
         if (!is_array($properties)) {
             $properties = func_get_args();
