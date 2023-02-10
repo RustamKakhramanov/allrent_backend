@@ -19,7 +19,7 @@ enum HomePageEnum: string
                 'company.logo', 'company.places.free_today_schedule', 'company.places.images'
             ],
             static::Place => [
-                'place.free_today_schedule', 'place.images', 'place.company', 'place.abilities', 'place.reviews'
+                'place.free_today_schedule', 'place.images', 'place.contacts', 'place.company', 'place.abilities', 'place.reviews'
             ],
         };
     }

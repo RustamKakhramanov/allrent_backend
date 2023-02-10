@@ -2,25 +2,27 @@
 
 namespace App\Models\Location;
 
+use App\Models\Review;
 use App\Traits\HasPrice;
+use App\Traits\Imageable;
+use App\Traits\HasMembers;
 use App\Models\Record\Rent;
+use App\Traits\HasContacts;
 use App\Enums\PriceTypeEnum;
 use App\Models\Record\Price;
 use App\Models\Location\City;
 use App\Enums\ScheduleTypeEnum;
 use App\Models\Company\Company;
 use App\Models\Record\Schedule;
-use App\Models\Review;
+
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use App\Traits\Eloquent\Sluggable;
-
 use App\Traits\Eloquent\Lessorable;
 use App\Traits\Eloquent\ExtendedBuilds;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Repositories\Location\PlaceRepository;
-use App\Traits\Imageable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -45,11 +47,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Place extends Model implements HasMedia
 {
-    use HasFactory, Lessorable, Sluggable;
-    use ExtendedBuilds;
-    use HasPrice;
-    use Imageable;
-    
+    use HasFactory,
+        Lessorable,
+        Sluggable,
+        ExtendedBuilds,
+        HasPrice,
+        Imageable,
+        HasContacts,
+        HasMembers;
+
     protected $fillable = [
         'company_id',
         'city_id',
@@ -111,7 +117,8 @@ class Place extends Model implements HasMedia
         return PlaceRepository::getFreeSchedule($this, now());
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->morphMany(Review::class, 'reviewed');
     }
 }

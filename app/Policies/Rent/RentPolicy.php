@@ -8,6 +8,10 @@ use App\Models\Company\Company;
 use App\Models\Location\Place;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/***
+ * property Place $place
+ * property Company $company
+ */
 class RentPolicy
 {
     use HandlesAuthorization;

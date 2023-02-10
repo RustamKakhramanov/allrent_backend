@@ -35,7 +35,8 @@ class PlaceTransformer extends TransformerAbstract
         'free_today_schedule',
         'images',
         'reviews',
-        'abilities'
+        'abilities',
+        'contacts'
     ];
 
     /**
@@ -48,7 +49,9 @@ class PlaceTransformer extends TransformerAbstract
         return [
             'id' => $place->id,
             'name' => $place->name,
+            'phone' => $place->phone,
             'slug' => $place->slug,
+            'company_slug' => $place->company->slug,
             'description' => $place->description,
             'address' => $place->address,
             'coordinates' => is_string($place->coordinates) ? json_decode($place->coordinates) : $place->coordinates,
@@ -56,6 +59,16 @@ class PlaceTransformer extends TransformerAbstract
             'info' => $place->info
         ];
     }
+
+
+    public function includeContacts(Place $place)
+    {
+        return $place->contacts ? $this->collection(
+            $place->contacts,
+            new ContactTransformer
+        ) : $this->null();
+    }
+
 
 
     public function includePrice(Place $place)

@@ -3,6 +3,7 @@
 namespace App\Models\Company;
 
 use App\Models\User;
+use App\Traits\HasContacts;
 use App\Models\Location\Place;
 use App\Enums\CompanyRolesEnum;
 use App\Traits\Eloquent\Sluggable;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Company extends Model
 {
-    use HasFactory, SoftDeletes, Sluggable;
+    use HasFactory, SoftDeletes, Sluggable, HasContacts;
 
     protected $fillable = [
         'name',
@@ -44,10 +45,7 @@ class Company extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function members()
-    {
-        return $this->belongsToMany(User::class, 'company_members');
-    }
+
     //$company->load(['places.schedules' => fn (MorphMany $to) => $to->where('company_id', $company->id)]);
     public function places()
     {
@@ -69,13 +67,7 @@ class Company extends Model
         ;
     }
 
-    public function getOwnerAttribute()
-    {
-        return $this->members()
-            ->whereType(CompanyRolesEnum::Owner())
-            ->oldest()
-            ->first();
-    }
+   
 
     public function allSchedules()
     {

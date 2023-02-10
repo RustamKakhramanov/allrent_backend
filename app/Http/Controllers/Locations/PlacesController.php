@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Locations;
 
+use App\Models\Location\Place;
+use App\Models\Company\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePlaceRequest;
 use App\Http\Requests\UpdatePlaceRequest;
-use App\Models\Location\Place;
+use App\Transformers\PlaceTransformer;
 
 class PlacesController extends Controller
 {
@@ -36,9 +38,11 @@ class PlacesController extends Controller
      * @param  \App\Models\Location\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function show(Place $place)
+    public function show(Company $company, Place $place)
     {
-        //
+      return fractal($place, new PlaceTransformer)->parseIncludes([
+        'free_today_schedule', 'images', 'company', 'abilities', 'reviews'
+      ]);
     }
 
     /**

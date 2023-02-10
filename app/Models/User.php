@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\HasAvatar;
 use App\Models\Record\Rent;
+use App\Traits\HasContacts;
 use App\Traits\ModelHasPhone;
 use App\Models\Company\Company;
 use App\Models\Record\Schedule;
@@ -79,6 +80,7 @@ class User extends Authenticatable  implements HasMedia
 
     use HasApiTokens, HasFactory, Notifiable, ModelSearchable, ModelHasPhone;
     use HasAvatar;
+    use HasContacts;
 
     /**
      * The attributes that are mass assignable.

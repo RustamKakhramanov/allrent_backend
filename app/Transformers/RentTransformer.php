@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Record\Rent;
+use App\Models\Location\Place;
 use League\Fractal\TransformerAbstract;
 
 class RentTransformer extends TransformerAbstract
@@ -73,6 +74,9 @@ class RentTransformer extends TransformerAbstract
     public function includeRentable(Rent $rent)
     {
 
-        return $rent->owner ? $this->item($rent->owner, new UserTransformer()) : $this->null();
+        switch($rent->rentable_type){
+            case Place::class:
+                return $this->item($rent->rentable, new PlaceTransformer()) ;
+        }
     }
 }

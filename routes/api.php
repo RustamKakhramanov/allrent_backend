@@ -1,14 +1,17 @@
 <?php
 
+use App\Models\Review;
 use App\Enums\CurrencyEnum;
 use App\Enums\PriceTypeEnum;
+use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use Illuminate\Support\Facades\Route;
+use App\Transformers\ImageTransformer;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AllowedController;
 use App\Http\Controllers\Auth\SmsController;
 use App\Http\Controllers\Rents\RentController;
-use App\Http\Controllers\Users\ProfileController;
+use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Companies\InviteController;
 use App\Http\Controllers\Locations\PlacesController;
 use App\Http\Controllers\Auth\RefreshTokenController;
@@ -19,9 +22,9 @@ use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Companies\CompaniesController;
 use App\Http\Controllers\Companies\CompanySchedulesController;
-use App\Models\Review;
-use App\Transformers\ImageTransformer;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Profile\ProfileRentsController;
+use App\Models\Contact;
+use App\Transformers\PlaceTransformer;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +73,7 @@ Route::group(['prefix' => 'companies/{company}'], function () {
 
     Route::middleware(['auth:api'])->group(function () {
         Route::apiResource('places', PlacesController::class);
+
         Route::group(['prefix' => 'places/{place}'], function () {
             Route::apiResource('schedules', CompanySchedulesController::class)->withoutMiddleware('auth:api');
             Route::apiResource('rents', RentController::class);
@@ -82,6 +86,7 @@ Route::group(['prefix' => 'companies/{company}'], function () {
 
 Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
     Route::get('/', [ProfileController::class, 'show']);
+    Route::resource('/rents', ProfileRentsController::class);
 });
 
 Route::group(['prefix' => 'allowed'], function () {
@@ -91,12 +96,19 @@ Route::group(['prefix' => 'allowed'], function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
+
 Route::post('/test', function(Request $request){
     $review = Place::first();
-    // $review->clearMediaCollection();
-    $review->saveImages([request()->file('image')]);
-    return fractal($review->images, new ImageTransformer);
+
+    $review->setPhone('+77713602692', 'Владимир');
+    $review->setWhatsApp('+77713602692');
+    $review->setTelegram('@rustamKakhramanov');
+    $review->setInstagram('@kakhramanovRus');
+    $review->setMail('poshta@poshta.com');
+
+    return fractal($review, new PlaceTransformer)->parseIncludes('contacts');
 });
+
 
 
 
