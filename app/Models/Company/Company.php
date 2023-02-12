@@ -3,6 +3,7 @@
 namespace App\Models\Company;
 
 use App\Models\User;
+use App\Traits\HasMembers;
 use App\Traits\HasContacts;
 use App\Models\Location\Place;
 use App\Enums\CompanyRolesEnum;
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Company extends Model
 {
-    use HasFactory, SoftDeletes, Sluggable, HasContacts;
+    use HasFactory, SoftDeletes, Sluggable, HasContacts, HasMembers;
 
     protected $fillable = [
         'name',

@@ -35,7 +35,7 @@ trait HasContacts
             $data['owner'] = $owner;
         }
 
-        return $this->contacts()->create($data);
+        return $this->id ? $this->contacts()->create($data) : null;
     }
 
     public function setWhatsApp($value, string $owner = null)

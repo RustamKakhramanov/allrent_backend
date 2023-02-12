@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use App\Enums\CompanyRolesEnum;
 use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 

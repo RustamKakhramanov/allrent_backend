@@ -64,6 +64,8 @@ class DatabaseSeeder extends Seeder
             }
 
             app(CreateAdminCommand::class)->handle();
+            
+            $this->call(AdminSeeder::class);
 
             DB::commit();
         } catch (Throwable $exception) {

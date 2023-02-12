@@ -98,15 +98,15 @@ Route::group(['prefix' => 'allowed'], function () {
 Route::get('/home', [HomeController::class, 'index']);
 
 Route::post('/test', function(Request $request){
-    $review = Place::first();
+    // $review = Place::first();
 
-    $review->setPhone('+77713602692', 'Владимир');
-    $review->setWhatsApp('+77713602692');
-    $review->setTelegram('@rustamKakhramanov');
-    $review->setInstagram('@kakhramanovRus');
-    $review->setMail('poshta@poshta.com');
+    // $review->setPhone('+77713602692', 'Владимир');
+    // $review->setWhatsApp('+77713602692');
+    // $review->setTelegram('@rustamKakhramanov');
+    // $review->setInstagram('@kakhramanovRus');
+    // $review->setMail('poshta@poshta.com');
 
-    return fractal($review, new PlaceTransformer)->parseIncludes('contacts');
+    // return fractal($review, new PlaceTransformer)->parseIncludes('contacts');
 });
 
 
