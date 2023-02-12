@@ -12,7 +12,7 @@ class ProfileRentsController extends Controller
 
     public function index()
     {
-      return fractal(auth()->user()->rents, new RentTransformer);
+      return fractal(auth()->user()->rents, new RentTransformer)->parseIncludes(['rentable','rentable.images','rentable.contacts','rentable.coordinates', 'specialist']);
     }
 
     public function show(Rent $rent)
@@ -21,7 +21,7 @@ class ProfileRentsController extends Controller
             abort(404);
         }
 
-      return fractal($rent, new RentTransformer)->parseIncludes(['rentable','rentable.images', 'specialist']);
+      return fractal($rent, new RentTransformer)->parseIncludes(['rentable','rentable.images','rentable.contacts','rentable.coordinates', 'specialist']);
     }
  
 
@@ -57,6 +57,10 @@ class ProfileRentsController extends Controller
      */
     public function destroy(Rent $rent)
     {
+      if($rent->user_id !== auth()->user()->id){
+        abort(404);
+    }
+
         $rent->delete();
     }
 }
