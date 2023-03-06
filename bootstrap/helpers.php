@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Models\Admin;
 use App\Enums\TimeEnum;
 use App\Models\User;
 use App\Helpers\LettersHelper;
@@ -130,8 +131,14 @@ if (!function_exists('get_day_time')) {
 }
 
 if (!function_exists('user')) {
-    function user(): ?User
+    function user()
     {
         return  auth()->user();
+    }
+}
+if (!function_exists('admin')){
+    function admin():User 
+    {
+        return  User::find(auth()->user()->id);
     }
 }

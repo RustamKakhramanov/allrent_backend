@@ -28,10 +28,12 @@ trait HasPrice
     {
         return $this->morphOne(Price::class, 'has_price')
             ->whereType(PriceTypeEnum::PerHour)
+            ->where('has_price_id', $this->id)
             ->where('start_date', '<=', now())
             ->whereNull('end_date')
             ->orWhere(function ($query) {
                 $query
+                ->where('has_price_id', $this->id)
                     ->whereType(PriceTypeEnum::PerHour)
                     ->where('start_date', '<=', now())
                     ->where('end_date', '>', now());

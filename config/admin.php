@@ -2,6 +2,7 @@
 
 use App\Admin\Models\Admin;
 use App\Admin\Extensions\DropdownActions;
+use App\Models\User;
 use App\Models\Vacancy;
 
 return [
@@ -182,7 +183,7 @@ return [
         'connection' => '',
 
         // User tables and model.
-        'users_table' => 'admin_users',
+        'users_table' => 'users',
         'users_model' => Admin::class,
 
         // Role table and model.

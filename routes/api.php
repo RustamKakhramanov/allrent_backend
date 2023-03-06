@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\Review;
+use App\Models\Contact;
 use App\Enums\CurrencyEnum;
 use App\Enums\PriceTypeEnum;
 use Illuminate\Http\Request;
 use App\Models\Location\Place;
 use Illuminate\Support\Facades\Route;
+use App\Services\Media\ImageCopyright;
 use App\Transformers\ImageTransformer;
+use App\Transformers\PlaceTransformer;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AllowedController;
 use App\Http\Controllers\Auth\SmsController;
@@ -21,10 +24,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Companies\CompaniesController;
-use App\Http\Controllers\Companies\CompanySchedulesController;
 use App\Http\Controllers\Profile\ProfileRentsController;
-use App\Models\Contact;
-use App\Transformers\PlaceTransformer;
+use App\Http\Controllers\Companies\CompanySchedulesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,8 +99,8 @@ Route::group(['prefix' => 'allowed'], function () {
 Route::get('/home', [HomeController::class, 'index']);
 
 Route::post('/test', function(Request $request){
-    // $review = Place::first();
-
+     $review = Place::first();
+     $review->saveImage(new ImageCopyright($request->file('image')));
     // $review->setPhone('+77713602692', 'Владимир');
     // $review->setWhatsApp('+77713602692');
     // $review->setTelegram('@rustamKakhramanov');

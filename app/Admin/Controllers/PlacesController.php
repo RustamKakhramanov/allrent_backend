@@ -8,7 +8,10 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Admin\Forms\Cities;
 use App\Admin\Models\Admin;
+use App\Enums\CurrencyEnum;
 use Illuminate\Support\Str;
+use App\Enums\PriceTypeEnum;
+use App\Models\Record\Price;
 use App\Models\Location\City;
 use Encore\Admin\Widgets\Tab;
 use App\Models\Location\Place;
@@ -142,18 +145,36 @@ class PlacesController extends AdminController
 
         $form->multipleFile('pictures', 'Картинки')->sortable()->removable();
 
+        $form->divider('Настройка графиков');
 
         $form->morphMany('schedules', 'Графики', function (Form\NestedForm $form) {
             // $form->select('type', 'Тип')->options(['default' => 'По умолчанию'])->required();
-            $form->select('type', 'Тип')->options(['default' => 'По умолчанию', 'day' => 'Определенный день'])->required();
+            $form->display('id');
+           
+            $form->select('type', 'Тип')->options(['default' => 'По умолчанию', 'day' => 'Определенный день'])->default('default')->required();
             $form->date('date', 'Дата')->required()->default(now());
             $form->time('start_at', 'Начало');
             $form->time('end_at', 'Конец');
-            $form->hiddenArray('schedule', 'График');
-            // $form->select('title')->required();
-            // $form->select('title')->required(); 
-            // $form->select('title')->required();
+            $form->text('price_value', 'Прайс за час')->required();
 
+            $form->hiddenArray('schedule', 'График');
+
+            // $form->embeds('allPrices', 'Прайс на график', function ($form) {
+            //     $form->select('type', 'Тип')->options(
+            //         collect(PriceTypeEnum::cases())->mapWithKeys(fn ($i) => [$i->value => $i->getName()])->toArray()
+            //     )->default(PriceTypeEnum::PerHour())->required();
+
+            //     $form->date('start_date', 'Начало действия')->required()->default(now());
+            //     $form->date('end_date', 'Конец действия')->required()->default(now()->addYears(3));
+
+            //     $form->select('currency', 'Валюта')->options(
+            //         collect(CurrencyEnum::cases())->mapWithKeys(fn ($i) => [$i->value => $i->getName()])->toArray()
+            //     )->default(CurrencyEnum::KZT());
+
+            //     $form->text('value', 'Значение')->required();
+            // });
+
+            $form->divider();
         });
 
         $form->saving(function (Form $form) {
@@ -176,11 +197,14 @@ class PlacesController extends AdminController
                 $form->schedules = collect($form->schedules)->map(function ($i) {
                     [$start, $end] = collect([$i['start_at'], $i['end_at']])->sort()->values()->toArray();
 
+
+
                     return [
                         "type" => $i['type'],
                         "date" => $i['date'],
                         "id" => $i['id'],
                         "_remove_" => $i['_remove_'],
+                        "price_value" => $i['price_value'],
                         "schedule" =>  btime_intervals($start, $end, 'H:i', true)->toArray(),
                     ];
                 })->toArray();
@@ -188,7 +212,7 @@ class PlacesController extends AdminController
         });
 
 
-
+        // dd(Schedule::find(28)->allPrices);
 
         $form->tools(function (Form\Tools $tools) {
 
@@ -202,6 +226,28 @@ class PlacesController extends AdminController
         });
 
 
+        $form->saved(function (Form $form) {
+
+            collect($form->schedules)->where('_remove_', 0)->each(
+                function ($i) use($form) {
+                    $schedule = $form->model()->schedules()->where([
+                        'date' => $i['date'],
+                        'type' => $i['type'],
+                    ])->first();
+                    $schedule->allPrices()->delete();
+                        
+                    if (isset($i['price_value']) && $i['price_value']) {
+                        $schedule->allPrices()->create([
+                            'start_date' => now(),
+                            'currency' => CurrencyEnum::KZT(),
+                            'value' => (int) $i['price_value'],
+                            'type' => PriceTypeEnum::PerHour(),
+                        ]);
+                    }
+
+                }
+            );
+        });
 
         $form->footer(function ($footer) {
             $footer->disableViewCheck();

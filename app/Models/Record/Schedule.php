@@ -37,7 +37,7 @@ class Schedule extends Model
         'date'
     ];
 
-    protected $appends = ['start_at', 'end_at'];
+    protected $appends = ['start_at', 'end_at', 'price_value'];
     protected $dates = ['date'];
 
     protected $casts = [
@@ -77,5 +77,10 @@ class Schedule extends Model
     public function getEndAtAttribute()
     {
         return array_values($this->schedule)[count($this->schedule) - 1];
+    }
+
+    public function getPriceValueAttribute()
+    {
+        return $this->price->value ?? null;
     }
 }

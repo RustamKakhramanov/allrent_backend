@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
                     ->create();
             }
 
-            app(CreateAdminCommand::class)->handle();
+            // app(CreateAdminCommand::class)->handle();
             
             $this->call(AdminSeeder::class);
 

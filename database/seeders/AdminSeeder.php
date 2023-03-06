@@ -21,10 +21,10 @@ class AdminSeeder extends Seeder
     {
         // create a user.
         // Administrator::truncate();
-        Administrator::firstOrCreate([
+        $admin = User::firstOrCreate([
             'username' => self::ADMIN_INIT_LOGIN,
             'name'     => 'Administrator',
-        ], ['password' => Hash::make(self::ADMIN_INIT_PASSWORD),]);
+        ], ['password' => self::ADMIN_INIT_PASSWORD,]);
 
         // create a role.
         // Role::truncate();
@@ -43,7 +43,7 @@ class AdminSeeder extends Seeder
         $manager = $roles->where('slug', AdminRolesEnum::Manager())->first();
 
         // add role to user.
-        Administrator::first()->roles()->save($adminRole);
+        $admin->roles()->save($adminRole);
 
         //create a permission
         Permission::truncate();
