@@ -78,9 +78,7 @@ class User extends Authenticatable  implements HasMedia
 {
     use HasRelationships, HasRoles, HasPermissions;
 
-    use HasApiTokens, HasFactory, Notifiable, ModelSearchable, ModelHasPhone;
-    use HasAvatar;
-    use HasContacts;
+    use HasApiTokens, HasFactory, Notifiable, ModelSearchable, ModelHasPhone,HasContacts, HasAvatar;
 
     /**
      * The attributes that are mass assignable.

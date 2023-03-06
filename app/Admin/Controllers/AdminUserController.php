@@ -2,13 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Role;
-use Encore\Admin\Controllers\UserController;
+use function trans;
+use function config;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use function config;
-use function trans;
+use App\Admin\Models\Admin;
+use App\Models\Company\Company;
+use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Controllers\UserController;
 
 class AdminUserController extends UserController
 {
@@ -40,7 +42,7 @@ class AdminUserController extends UserController
         $grid->column( 'roles', trans( 'admin.roles' ) )->pluck( 'name' )->label();
         $grid->column( 'created_at', trans( 'admin.created_at' ) );
         $grid->column( 'updated_at', trans( 'admin.updated_at' ) );
-
+        
 
         $grid->actions( function ( Grid\Displayers\Actions $actions ) {
             if ( $actions->getKey() == 1 ) {
@@ -79,8 +81,11 @@ class AdminUserController extends UserController
      */
     public function form () {
         $form = parent::form();
+        
         $form->email('email', 'E-mail')->required();
- 
+        if(auth()->user()->isAdministrator()){
+            $form->multipleSelect('companies', 'Компания')->options(Company::all()->pluck('name', 'id'))->required();
+        }
         // $form->mobile('phone', __('Телефон'))->options(['mask' => '+9 (999) 999-99-99']);
         
         return $form;

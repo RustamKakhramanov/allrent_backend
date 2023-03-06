@@ -73,7 +73,7 @@ trait HasContacts
         );
     }
 
-    protected function phone(): Attribute
+    protected function phoneNumber(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => $this->setPhone($value),

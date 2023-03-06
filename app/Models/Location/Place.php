@@ -69,6 +69,7 @@ class Place extends Model implements HasMedia
 
     protected $casts = ['coordinates' => 'array', 'info' => 'array'];
     protected $with = ['price'];
+    protected $appends = ['pictures'];
 
 
     public function companies()
@@ -120,5 +121,21 @@ class Place extends Model implements HasMedia
     public function reviews()
     {
         return $this->morphMany(Review::class, 'reviewed');
+    }
+    // protected function pictures(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => $this->getImages(),
+    //     );
+    // }
+
+    public function getPicturesAttribute($pictures)
+    {
+        return $this->images->map(fn($i) => $i->getFullUrl())->toArray();
+    }
+
+    public function setPicturesAttribute($pictures)
+    {
+       
     }
 }

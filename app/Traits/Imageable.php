@@ -40,18 +40,27 @@ trait Imageable
             ->toMediaCollection($collectionName);
     }
 
+    public function syncImages(array $images, string $collectionName = 'default')
+    {
+        $this->clearMediaCollection($collectionName);
+        if (count($images)) {
+            $this->saveImages($images, $collectionName);
+        }
+    }
+
     public function saveImages(array $images, string $collectionName = 'default')
     {
         array_walk(
             $images,
-            fn ($image) => $image instanceof UploadedFile ?
-                $this->saveImage(new ImageCopyright($image), $collectionName) : $image
+            fn ($image) => 
+                $this->saveImage($image instanceof UploadedFile ? new ImageCopyright($image): $image, $collectionName)
         );
     }
 
     public function getImageAttribute()
     {
     }
+
     public function getImages(string $collectionName = 'default', array|callable $filters = [])
     {
         return $this->getMedia($collectionName, $filters);

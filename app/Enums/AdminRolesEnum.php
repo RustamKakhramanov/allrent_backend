@@ -30,7 +30,7 @@ enum AdminRolesEnum: string
             static::Administrator => 'Администратор',
             static::CompanyOwner => 'Менеджер компании',
             static::PlaceOwner => 'Менеджер мест',
-            static::Manager => 'Ряовой менеджер',
+            static::Manager => 'Рядовой менеджер',
         };
     }
 

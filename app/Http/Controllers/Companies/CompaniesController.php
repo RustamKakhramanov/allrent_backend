@@ -22,7 +22,7 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        return fractal(CompanyRepository::withoutInit()->paginate(15), new CompanyTransformer)->parseIncludes('places');
+        return fractal(Company::paginate(15), new CompanyTransformer)->parseIncludes('places')->withResourceName('data');
     }
 
     /**

@@ -18,9 +18,11 @@
  *
  */
 use Encore\Admin\Form;
+use App\Admin\Extensions\HiddenArray;
 use App\Admin\Extensions\Multiselect;
 use App\Admin\Extensions\CategoryWithItems;
 
 Form::forget(['map', 'editor']);
 Form::extend('items', CategoryWithItems::class);
 Form::extend('mselect', Multiselect::class);
+Form::extend('hiddenArray', HiddenArray::class);

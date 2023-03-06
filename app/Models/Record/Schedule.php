@@ -37,6 +37,7 @@ class Schedule extends Model
         'date'
     ];
 
+    protected $appends = ['start_at', 'end_at'];
     protected $dates = ['date'];
 
     protected $casts = [
@@ -66,5 +67,15 @@ class Schedule extends Model
     public function scopeWhereDefault(Builder $builder)
     {
         return $builder->where('type', ScheduleTypeEnum::Default());
+    }
+
+    public function getStartAtAttribute()
+    {
+        return $this->schedule[0];
+    }
+
+    public function getEndAtAttribute()
+    {
+        return array_values($this->schedule)[count($this->schedule) - 1];
     }
 }
