@@ -46,6 +46,6 @@ class HomeRepository
 
     protected function setPlaceData()
     {
-        $this->data = $this->data->merge(['place' => PlaceRepository::first()]);
+        $this->data = $this->data->merge(['place' => PlaceRepository::where('slug', 'synergy')->first()]);
     }
 }

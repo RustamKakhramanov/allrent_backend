@@ -10,11 +10,11 @@ trait HasPrice
     public function prices()
     {
         return $this->allPrices()
-            ->where('start_date', '>=', now())
+            ->where('start_date', '<=', now())
             ->whereNull('end_date')
             ->orWhere(function ($query) {
                 $query
-                    ->where('start_date', '>=', now())
+                    ->where('start_date', '<=', now())
                     ->where('end_date', '<', now());
             });
     }
@@ -28,7 +28,6 @@ trait HasPrice
     {
         return $this->morphOne(Price::class, 'has_price')
             ->whereType(PriceTypeEnum::PerHour)
-            ->where('has_price_id', $this->id)
             ->where('start_date', '<=', now())
             ->whereNull('end_date')
             ->orWhere(function ($query) {

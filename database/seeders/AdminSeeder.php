@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Admin\Models\Admin;
 use App\Enums\AdminRolesEnum;
-use App\Models\User;
+use App\Admin\Models\User;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Permission;
@@ -21,10 +22,10 @@ class AdminSeeder extends Seeder
     {
         // create a user.
         // Administrator::truncate();
-        $admin = User::firstOrCreate([
+        $admin = Admin::firstOrCreate([
             'username' => self::ADMIN_INIT_LOGIN,
             'name'     => 'Administrator',
-        ], ['password' => self::ADMIN_INIT_PASSWORD,]);
+        ], ['password' => Hash::make(self::ADMIN_INIT_PASSWORD),]);
 
         // create a role.
         // Role::truncate();

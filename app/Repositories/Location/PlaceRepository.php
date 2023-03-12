@@ -43,11 +43,15 @@ class PlaceRepository extends Repository
         }
 
         $schedule =   $schedule_query
-            ->orWhere('type',  ScheduleTypeEnum::Default())
+            ->orWhere(fn($i) => 
+            $i->where('type',  ScheduleTypeEnum::Default())
+            ->where('schedulable_id', $place->id)
+            
+            )
             ->with('price')
             ->first();
 
-        if (!$schedule && !$schedule->schedules) {
+            if (!$schedule && !$schedule->schedules) {
             return collect();
         }
 
