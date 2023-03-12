@@ -2,11 +2,13 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Record\Rent;
-use Encore\Admin\Controllers\AdminController;
+use App\Models\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\Record\Rent;
+use App\Models\Location\Place;
+use Encore\Admin\Controllers\AdminController;
 
 class RentsController extends AdminController
 {
@@ -25,8 +27,42 @@ class RentsController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Rent());
+        $grid->model()
+        // ->where('rentable_type',)
+        ->whereIn(
+            'rentable_id', 
+            Place::query()->whereIn('company_id', User::find(auth()->user()->id)->companies()->pluck('companies.id'))->pluck('id')->toArray()
+        )->orderByDesc('id');
 
         $grid->column('id', __('Id'));
+
+        $grid->column('user_id', __('Арендатор'))->display(function ($id) {
+            $user = User::find($id);
+            return  "$user->name ($user->phone)";
+        });
+
+        $grid->column('scheduled_at', __('Начало аренды'))->display(function ($d) {
+            return $d ? cparse($d)->timezone('Asia/Almaty')->toDateTimeString() : 'Не установлено';
+        })->filter('date');
+
+        $grid->column('scheduled_end_at', __('Конец аренды'))->display(function ($d) {
+            return $d ? cparse($d)->timezone('Asia/Almaty')->toDateTimeString() : 'Не установлено';
+
+        })->filter('date');
+
+        $grid->column('start_at', __('Фактическое начало аренды'))->display(function ($d) {
+            return $d ? cparse($d)->timezone('Asia/Almaty')->toDateTimeString() : 'Не установлено';
+
+        });
+        $grid->column('end_at', __('Фактический конец аренды'))->display(function ($d) {
+            return $d ? cparse($d)->timezone('Asia/Almaty')->toDateTimeString() : 'Не установлено';
+
+        });
+
+        $grid->column('amount', __('Nbg'));
+        $grid->column('currency', __('Nbg'));
+        $grid->column('is_paid', __('Nbg'));
+
         
         return $grid;
     }

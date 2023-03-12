@@ -21,7 +21,9 @@ use App\Models\Record\Schedule;
 use Encore\Admin\Layout\Content;
 use App\Services\Media\ImageCopyright;
 use App\Admin\Forms\Tabs\Place as TabsPlace;
+use App\Enums\ContactEnum;
 use Encore\Admin\Controllers\AdminController;
+use Intervention\Image\Exception\NotFoundException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PlacesController extends AdminController
@@ -42,7 +44,7 @@ class PlacesController extends AdminController
     {
         $grid = new Grid(new Place());
         if (!auth()->user()->isAdministrator()) {
-            // $grid->model()->whereIn('company_id', User::find(auth()->user()->id)->companies()->pluck('companies.id'));
+            $grid->model()->whereIn('company_id', User::find(auth()->user()->id)->companies()->pluck('companies.id'));
             $grid->model()->with('schedules');
             $grid->model()->orderBy('id');
             // $grid->actions(function ($actions) {
@@ -116,6 +118,21 @@ class PlacesController extends AdminController
     //         ->body(Tab::forms($forms));
     // }
 
+
+
+
+    public function edit($id, Content $content)
+    {
+
+        if (!auth()->user()->isAdministrator() &&  !in_array($id, User::find(auth()->user()->id)->companies()->pluck('companies.id')->toArray())) {
+            throw new NotFoundException();
+        }
+        return $content
+            ->title($this->title())
+            ->description($this->description['edit'] ?? trans('admin.edit'))
+            ->body($this->form()->edit($id));
+    }
+
     /**
      * Make a form builder.
      *
@@ -124,6 +141,12 @@ class PlacesController extends AdminController
     protected function form()
     {
         $form = new Form(new Place());
+
+        // dd(request()->route('id'));
+
+        //         if (!auth()->user()->isAdministrator() &&  !in_array($form->model()->id, User::find(auth()->user()->id)->companies()->pluck('companies.id')->toArray())) {
+        //             throw new NotFoundException();
+        //        }
         $form->display('id', 'Id');
         $form->text('name', 'Название');
         $form->text('slug', 'Cлаг для ЧПУ');
@@ -147,10 +170,22 @@ class PlacesController extends AdminController
 
         $form->divider('Настройка графиков');
 
+
+
+        $form->morphMany('contacts', 'Контакт', function (Form\NestedForm $form) {
+            // $form->select('type', 'Тип')->options(['default' => 'По умолчанию'])->required();
+
+            $form->select('type', 'Тип')->options(
+                collect(ContactEnum::cases())->mapWithKeys(fn ($i) => [$i->value => $i->getName()])->toArray()
+            )->default('phone')->required();
+
+            $form->text('value', 'Значение')->required();
+            $form->divider();
+        });
+
+
         $form->morphMany('schedules', 'Графики', function (Form\NestedForm $form) {
             // $form->select('type', 'Тип')->options(['default' => 'По умолчанию'])->required();
-            $form->display('id');
-           
             $form->select('type', 'Тип')->options(['default' => 'По умолчанию', 'day' => 'Определенный день'])->default('default')->required();
             $form->date('date', 'Дата')->required()->default(now());
             $form->time('start_at', 'Начало');
@@ -219,23 +254,20 @@ class PlacesController extends AdminController
             // Disable `List` btn.
             $tools->disableList();
 
-            // Disable `Delete` btn.
-            $tools->disableDelete();
-
-            $tools->add('<a  href="" class="btn btn-sm btn-success"><i class="fa fa-eye"></i>&nbsp;&nbsp;Редактировать график</a>');
+            // $tools->disableDelete();
         });
 
 
         $form->saved(function (Form $form) {
 
             collect($form->schedules)->where('_remove_', 0)->each(
-                function ($i) use($form) {
+                function ($i) use ($form) {
                     $schedule = $form->model()->schedules()->where([
                         'date' => $i['date'],
                         'type' => $i['type'],
                     ])->first();
                     $schedule->allPrices()->delete();
-                        
+
                     if (isset($i['price_value']) && $i['price_value']) {
                         $schedule->allPrices()->create([
                             'start_date' => now(),
@@ -244,14 +276,12 @@ class PlacesController extends AdminController
                             'type' => PriceTypeEnum::PerHour(),
                         ]);
                     }
-
                 }
             );
         });
 
         $form->footer(function ($footer) {
             $footer->disableViewCheck();
-
 
             // disable `Continue Creating` checkbox
             $footer->disableCreatingCheck();
