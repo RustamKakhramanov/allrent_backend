@@ -70,7 +70,9 @@ return [
     */
 
     // 'timezone' => 'Asia/Almaty',
-    'timezone' => 'UTC',
+    // 'timezone' => 'UTC',
+    'timezone' => 'Asia/Aqtau',
+
 
     /*
     |--------------------------------------------------------------------------

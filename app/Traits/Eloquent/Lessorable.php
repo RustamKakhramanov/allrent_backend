@@ -6,6 +6,7 @@ use App\Models\Record\Rent;
 use App\Models\Record\Schedule;
 use App\Traits\Eloquent\TimeQueries;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 /**
  * @property Collection|Schedule[]  $schedules
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait Lessorable
 {
     use TimeQueries;
+    use HasRelationships;
     
     protected $scopeTimeColumn = 'schedules.date';
 

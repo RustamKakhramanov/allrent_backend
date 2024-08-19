@@ -48,14 +48,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Place extends Model implements HasMedia
 {
     use HasFactory,
-        Lessorable,
         Sluggable,
         ExtendedBuilds,
         HasPrice,
         Imageable,
         HasContacts,
         HasMembers;
-
+    
+        protected $scopeTimeColumn = 'schedules.date';
+    
+        public function rents()
+        {
+            return $this->morphMany(Rent::class, 'rentable');
+        }
+    
+        public function schedules()
+        {
+            return $this->morphMany(Schedule::class, 'schedulable');
+        }
     protected $fillable = [
         'company_id',
         'city_id',

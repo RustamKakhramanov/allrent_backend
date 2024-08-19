@@ -25,7 +25,12 @@ class RentController extends Controller
      */
     public function store(StoreRentRequest $request, Company $company, Place $place)
     {
-       return fractal($place->rents()->create($request->validated()), new RentTransformer);
+       return fractal(Rent::create([
+        'rentable_id' => $place->id,
+        'rentable_type' => $place::class,
+        ...$request->validated()
+       ]), new RentTransformer);
+    //    return fractal($place->rents()->create($request->validated()), new RentTransformer);
     }
 
 

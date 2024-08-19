@@ -19,7 +19,7 @@ class ScheduleObserver
             $schedule->user_id = Auth::user()->id ??  null;
         }
 
-        if ($company = request()->route('company')) {
+        if (!$schedule->company_id  && $company = request()->route('company')) {
             $schedule->company_id = $company->id;
         }
     }

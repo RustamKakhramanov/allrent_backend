@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Admin\Models\Admin;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -40,7 +41,7 @@ class CreateAdminCommand extends Command
     {
         if (!User::query()->where('email', 'admin@admin.com')->first()) {
             /** @var User $user */
-            $user = User::query()->create([
+            $user = Admin::query()->create([
                 'email' => 'admin@admin.com',
                 'phone' => '48093216263',
                 'password' => 'qazwsx12',

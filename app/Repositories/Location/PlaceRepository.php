@@ -5,6 +5,8 @@ namespace App\Repositories\Location;
 use App\Enums\ScheduleTypeEnum;
 use App\Repositories\Repository;
 use App\DTOs\CompletedSheduleDTO;
+use App\Models\Location\Place;
+use App\Models\Record\Schedule;
 use Illuminate\Database\Eloquent\Builder;
 
 class PlaceRepository extends Repository
@@ -15,7 +17,7 @@ class PlaceRepository extends Repository
         return $place;
     }
 
-    public static function getCompletedSchedule($place, $period, $free = false)
+    public static function getCompletedSchedule(Place $place, $period, $free = false)
     {
         if (is_array($period)) {
             [$start, $end] = $period;
@@ -23,7 +25,8 @@ class PlaceRepository extends Repository
             $period = cparse($period);
         }
 
-        $schedule_query =  $place->schedules()
+        // $schedule_query =  $place->schedules()
+        $schedule_query = Schedule::query()
             ->orderByRaw(
                 $place->prepareOrderByRaw(
                     ScheduleTypeEnum::getCasesByPriority(),
@@ -41,17 +44,18 @@ class PlaceRepository extends Repository
         } else {
             $schedule_query = $schedule_query->whereDay('date', $period);
         }
-
+        // dd($place->schedules()->toSql());
         $schedule =   $schedule_query
-            ->orWhere(fn($i) => 
-            $i->where('type',  ScheduleTypeEnum::Default())
-            ->where('schedulable_id', $place->id)
-            
+            ->orWhere(
+                fn ($i) =>
+                $i->where('type',  ScheduleTypeEnum::Default())
+                    ->where('schedulable_id', $place->id)
+
             )
             ->with('price')
             ->first();
 
-            if (!$schedule && !$schedule->schedules) {
+        if (!$schedule && !$schedule->schedules) {
             return collect();
         }
 
@@ -75,7 +79,9 @@ class PlaceRepository extends Repository
             $completed =  $completed->filter(fn (CompletedSheduleDTO $item) => !$item->active);
         }
 
-        $schedule->schedule = $completed->values()->toArray();
+        $schedule->schedule = $completed->values()
+            ->map(fn (CompletedSheduleDTO $item) => ['time' => $item->time->addHours(-5)->format('Y-m-d\TH:i:s.uP'), 'active' => $item->active]) //временный костыль, так как не понятна универсальность подсчета времени
+            ->toArray();
 
         return $schedule;
     }

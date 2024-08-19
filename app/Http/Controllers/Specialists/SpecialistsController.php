@@ -16,7 +16,6 @@ class SpecialistsController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
