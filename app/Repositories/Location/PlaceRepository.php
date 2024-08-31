@@ -71,7 +71,7 @@ class PlaceRepository extends Repository
             ->map(
                 fn ($item) =>
                 CompletedSheduleDTO::make(
-                    ['time' => cparse($item), 'active' => (bool) $rents->contains($item)]
+                    ['time' => cparse($item), 'active' => (bool) $rents->contains($item) || cparse($period)->setHours($item)->lessThanOrEqualTo(now()->addHours(+6))] // окстыль со временем, но ограничение чтобы не выбрали раньше чем сейчас + 1ч
                 )->setActualyDate($period)
             );
 
