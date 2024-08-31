@@ -55,15 +55,15 @@ if (!function_exists('is_production')) {
 }
 
 if (!function_exists('btime_intervals')) {
-    function btime_intervals($time_begin, $time_end, $format = '', $last = false)
+    function btime_intervals($time_begin, $time_end, $format = '', $last = false, $pt = 'PT1H')
     {
         $begin = new DateTime($time_begin);
         $end = new DateTime($time_end);
 
-        $interval = new DateInterval('PT30M');
+        $interval = new DateInterval($pt);
         $periods = new DatePeriod($begin, $interval, $end);
 
-        $intervals = collect(iterator_to_array($periods))->map(fn (DateTime $time) => $format ? $time->format($format) : $time->getTimestamp());
+        $intervals = collect(iterator_to_array($periods))->map(fn(DateTime $time) => $format ? $time->format($format) : $time->getTimestamp());
 
         $c_end = $format ? cparse($time_end)->format($format) : cparse($time_end)->getTimestamp();
 
@@ -85,19 +85,17 @@ if (!function_exists('to_timestamp')) {
 
 if (!function_exists('cparse')) {
     function cparse($value)
-    {   
-        if(request('test') === 1){
+    {
+        if (request('test') === 1) {
             date_default_timezone_set('Asia/Almaty');
 
-            dd( date( 'Y,m H:i', 1662489600));
+            dd(date('Y,m H:i', 1662489600));
         }
-        
-        try{
-            return Carbon::parse($value);
 
-        }catch(\Exception){
+        try {
             return Carbon::parse($value);
-
+        } catch (\Exception) {
+            return Carbon::parse($value);
         }
     }
 }
@@ -136,8 +134,8 @@ if (!function_exists('user')) {
         return  auth()->user();
     }
 }
-if (!function_exists('admin')){
-    function admin():User 
+if (!function_exists('admin')) {
+    function admin(): User
     {
         return  User::find(auth()->user()->id);
     }

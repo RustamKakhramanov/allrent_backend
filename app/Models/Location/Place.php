@@ -54,18 +54,18 @@ class Place extends Model implements HasMedia
         Imageable,
         HasContacts,
         HasMembers;
-    
-        protected $scopeTimeColumn = 'schedules.date';
-    
-        public function rents()
-        {
-            return $this->morphMany(Rent::class, 'rentable');
-        }
-    
-        public function schedules()
-        {
-            return $this->morphMany(Schedule::class, 'schedulable');
-        }
+
+    protected $scopeTimeColumn = 'schedules.date';
+
+    public function rents()
+    {
+        return $this->morphMany(Rent::class, 'rentable');
+    }
+
+    public function schedules()
+    {
+        return $this->morphMany(Schedule::class, 'schedulable');
+    }
     protected $fillable = [
         'company_id',
         'city_id',
@@ -120,7 +120,7 @@ class Place extends Model implements HasMedia
 
     public function getCompletedTodayScheduleAttribute()
     {
-        return PlaceRepository::getCompletedSchedule($this, now());
+        return (new PlaceRepository)->getCompletedSchedule($this, now());
     }
 
     public function getFreeTodayScheduleAttribute()
@@ -144,8 +144,5 @@ class Place extends Model implements HasMedia
         return $this->images->map(fn($i) => $i->getFullUrl())->toArray();
     }
 
-    public function setPicturesAttribute($pictures)
-    {
-       
-    }
+    public function setPicturesAttribute($pictures) {}
 }

@@ -17,15 +17,8 @@ class PlaceRepository extends Repository
         return $place;
     }
 
-    public static function getCompletedSchedule(Place $place, $period, $free = false)
+    public  function getSchedule(Place $place, $period)
     {
-        if (is_array($period)) {
-            [$start, $end] = $period;
-        } else {
-            $period = cparse($period);
-        }
-
-        // $schedule_query =  $place->schedules()
         $schedule_query = Schedule::query()
             ->orderByRaw(
                 $place->prepareOrderByRaw(
@@ -45,16 +38,26 @@ class PlaceRepository extends Repository
             $schedule_query = $schedule_query->whereDay('date', $period);
         }
         // dd($place->schedules()->toSql());
-        $schedule =   $schedule_query
+        return $schedule_query
             ->orWhere(
-                fn ($i) =>
+                fn($i) =>
                 $i->where('type',  ScheduleTypeEnum::Default())
                     ->where('schedulable_id', $place->id)
 
             )
             ->with('price')
             ->first();
+    }
 
+    public function getCompletedSchedule(Place $place, $period, $free = false)
+    {
+        if (is_array($period)) {
+            [$start, $end] = $period;
+        } else {
+            $period = cparse($period);
+        }
+
+        $schedule = static::getSchedule($place, $period);
         if (!$schedule && !$schedule->schedules) {
             return collect();
         }
@@ -64,23 +67,23 @@ class PlaceRepository extends Repository
             ->whereDay('scheduled_end_at', $period)
             ->get()
             ->map(
-                fn ($item) => btime_intervals($item->scheduled_at, $item->scheduled_end_at, 'H:i', true)
+                fn($item) => btime_intervals($item->scheduled_at, $item->scheduled_end_at, 'H:i', true)
             )->collapse();
 
         $completed = collect($schedule->schedule)
             ->map(
-                fn ($item) =>
+                fn($item) =>
                 CompletedSheduleDTO::make(
                     ['time' => cparse($item), 'active' => (bool) $rents->contains($item) || cparse($period)->setHours($item)->lessThanOrEqualTo(now()->addHours(+6))] // окстыль со временем, но ограничение чтобы не выбрали раньше чем сейчас + 1ч
                 )->setActualyDate($period)
             );
 
         if ($free) {
-            $completed =  $completed->filter(fn (CompletedSheduleDTO $item) => !$item->active);
+            $completed =  $completed->filter(fn(CompletedSheduleDTO $item) => !$item->active);
         }
 
         $schedule->schedule = $completed->values()
-            ->map(fn (CompletedSheduleDTO $item) => ['time' => $item->time->addHours(-5)->format('Y-m-d\TH:i:s.uP'), 'active' => $item->active]) //временный костыль, так как не понятна универсальность подсчета времени
+            ->map(fn(CompletedSheduleDTO $item) => ['time' => $item->time->setDay($period->format('d'))->addHours(-5)->format('Y-m-d\TH:i:s.uP'), 'active' => $item->active]) //временный костыль, так как не понятна универсальность подсчета времени
             ->toArray();
 
         return $schedule;
@@ -98,4 +101,6 @@ class PlaceRepository extends Repository
             return $item;
         });
     }
+
+    public function isFree() {}
 }

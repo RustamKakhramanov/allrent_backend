@@ -24,8 +24,9 @@ class CompanySchedulesController extends Controller
      */
     public function index(Company $company, Place $place)
     {
+
         return fractal(
-            PlaceRepository::getCompletedSchedule($place, request('day', now())),
+            (new PlaceRepository)->getCompletedSchedule($place, request('day', now())),
             new ScheduleTransformer
         );
     }

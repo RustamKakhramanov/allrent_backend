@@ -19,19 +19,19 @@ class CompanyRepository extends Repository
     public function afterPaginate($companies)
     {
         return $companies->map(function ($company) {
-            if (user() && user()->isMember($company)){
-
-            }else {
+            if (user() && user()->isMember($company)) {
+            } else {
                 // $company->load(['places.completed_schedule']);
             }
-         
+
 
             return $company;
         });
     }
 
-    public static function getCompletedSchedule($schedule, $rents){
-        return PlaceRepository::getCompletedSchedule($schedule,$rents);
+    public static function getCompletedSchedule($schedule, $rents)
+    {
+        return (new PlaceRepository)->getCompletedSchedule($schedule, $rents);
     }
 
     public function afterGet($companies)

@@ -123,8 +123,7 @@ class PlacesController extends AdminController
 
     public function edit($id, Content $content)
     {
-
-        if (!auth()->user()->isAdministrator() &&  !in_array($id, User::find(auth()->user()->id)->companies()->pluck('companies.id')->toArray())) {
+        if (!auth()->user()->isAdministrator() &&  ! User::find(auth()->user()->id)->companies()->whereHas('places', fn($i) => $i->where('id', $id))->exists()) {
             throw new NotFoundException();
         }
         return $content
@@ -176,7 +175,7 @@ class PlacesController extends AdminController
             // $form->select('type', 'Тип')->options(['default' => 'По умолчанию'])->required();
 
             $form->select('type', 'Тип')->options(
-                collect(ContactEnum::cases())->mapWithKeys(fn ($i) => [$i->value => $i->getName()])->toArray()
+                collect(ContactEnum::cases())->mapWithKeys(fn($i) => [$i->value => $i->getName()])->toArray()
             )->default('phone')->required();
 
             $form->text('value', 'Значение')->required();
@@ -217,12 +216,12 @@ class PlacesController extends AdminController
             if (isset($form->_file_sort_['pictures'])) {
                 Media::setNewOrder(
                     collect(explode(',', $form->_file_sort_['pictures']))->map(
-                        fn ($i) => $form->model()->images[$i]->id
+                        fn($i) => $form->model()->images[$i]->id
                     )->toArray()
                 );
             }
             if (is_array($form->pictures)) {
-                $form->model()->saveImages(collect($form->pictures)->map(fn ($i) => new ImageCopyright($i))->toArray());
+                $form->model()->saveImages(collect($form->pictures)->map(fn($i) => new ImageCopyright($i))->toArray());
                 $form->model()->refresh();
             } elseif ($form->pictures === '_file_del_') {
                 $form->model()->images[0]->delete();
@@ -240,7 +239,7 @@ class PlacesController extends AdminController
                         "id" => $i['id'],
                         "_remove_" => $i['_remove_'],
                         "price_value" => $i['price_value'],
-                        "schedule" =>  btime_intervals($start, $end, 'H:i', true)->toArray(),
+                        "schedule" =>  btime_intervals($start, $end, 'H:i', true, 'PT1H')->toArray(),
                     ];
                 })->toArray();
             }
