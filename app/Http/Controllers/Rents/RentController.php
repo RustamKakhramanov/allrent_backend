@@ -27,7 +27,7 @@ class RentController extends Controller
     public function store(StoreRentRequest $request, Company $company, Place $place)
     {
         $data = app(RecordService::class)->handle($place, $request->validated());
-        
+
         return fractal(Rent::create($data), new RentTransformer);
     }
 

@@ -16,7 +16,8 @@ class PlaceTransformer extends TransformerAbstract
      * @var array
      */
     protected array $defaultIncludes = [
-        'reviews_count', 'price'
+        'reviews_count',
+        'price'
     ];
 
     /**
@@ -95,16 +96,15 @@ class PlaceTransformer extends TransformerAbstract
 
         for ($i = 1; $i <= 20; $i++) {
             $ab[] = (object) [
-                'id' => $i, 
-                'name' => 'Petfriendly', 
-                'icon' => fake()->imageUrl(30,30), 
-                'value' => 'У нас можно приходить с питомцами, есть посуда и корм ' .$i
+                'id' => $i,
+                'name' => 'Petfriendly',
+                'icon' => fake()->imageUrl(30, 30),
+                'value' => fake()->realText
             ];
         }
 
         return $this->collection(
-            // $place->abilities,
-            $ab,
+            $place->abilities ?? $ab,
             new AbilitiesTransformer
         );
     }

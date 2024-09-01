@@ -22,6 +22,7 @@ use Encore\Admin\Layout\Content;
 use App\Services\Media\ImageCopyright;
 use App\Admin\Forms\Tabs\Place as TabsPlace;
 use App\Enums\ContactEnum;
+use App\Models\Ability;
 use Encore\Admin\Controllers\AdminController;
 use Intervention\Image\Exception\NotFoundException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -210,6 +211,8 @@ class PlacesController extends AdminController
 
             $form->divider();
         });
+
+        $form->multipleSelect('abilities','Доп. услуги')->options(Ability::all()->pluck('name','id'));
 
         $form->saving(function (Form $form) {
 

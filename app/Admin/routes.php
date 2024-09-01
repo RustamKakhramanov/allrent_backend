@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\AbilitiesController;
 use Illuminate\Routing\Router;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::group([
     $router->resource('/places', PlacesController::class);
     $router->resource('/schedules', SchedulesController::class);
     $router->resource('/rents', RentsController::class);
+    $router->resource('/abilities', AbilitiesController::class);
 
 
 });

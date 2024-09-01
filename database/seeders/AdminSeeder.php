@@ -103,7 +103,7 @@ class AdminSeeder extends Seeder
                 'http_method' => '',
                 'http_path'   => '/schedules*',
             ],
-           
+
             [
                 'name'        => 'Управление городами',
                 'slug'        => 'cities',
@@ -153,7 +153,7 @@ class AdminSeeder extends Seeder
         //     $managerRole->permissions()->save($permission);
         // });
 
-      
+
         $permissionsCompany =  Permission::query()->whereIn('slug', ['settings', 'auth.login', 'schedules', 'companies', 'places', 'rents'])->get()->pluck('id')->toArray();
         $permissionsForPlace = Permission::query()->whereIn('slug', ['auth.login', 'history', 'dashboard', 'schedules', 'places', 'rents'])->pluck('id')->toArray();
         $permissionsForManagers = Permission::query()->whereIn('slug', ['auth.login', 'history', 'dashboard', 'rents',])->pluck('id')->toArray();
@@ -233,8 +233,15 @@ class AdminSeeder extends Seeder
                 'icon'      => 'fa-calendar',
                 'uri'       => 'schedules',
             ],
+            [
+                'parent_id' => 0,
+                'order'     => 8,
+                'title'     => 'Доп. услуги',
+                'icon'      => 'fa-list-ul',
+                'uri'       => 'abilities',
+            ],
 
-             
+
         ]);
 
         Menu::find(2)->roles()->save($adminRole);
@@ -245,7 +252,7 @@ class AdminSeeder extends Seeder
         Menu::query()->whereIn('uri', ['rents', 'places', 'schedules'])->each(function (Menu $menu) use ($placeOwner) {
             $menu->roles()->save($placeOwner);
         });
-        
+
         Menu::query()->whereIn('uri', ['rents', 'rents'])->each(function (Menu $menu) use ($manager) {
             $menu->roles()->save($manager);
         });

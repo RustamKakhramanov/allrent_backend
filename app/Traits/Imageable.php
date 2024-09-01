@@ -52,7 +52,7 @@ trait Imageable
     {
         array_walk(
             $images,
-            fn ($image) => 
+            fn ($image) =>
                 $this->saveImage($image instanceof UploadedFile ? new ImageCopyright($image): $image, $collectionName)
         );
     }

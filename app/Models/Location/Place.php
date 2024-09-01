@@ -12,7 +12,9 @@ use App\Enums\PriceTypeEnum;
 use App\Models\Record\Price;
 use App\Models\Location\City;
 use App\Enums\ScheduleTypeEnum;
+use App\Models\Ability;
 use App\Models\Company\Company;
+use App\Models\PlaceHasAbility;
 use App\Models\Record\Schedule;
 
 use Spatie\Image\Manipulations;
@@ -85,6 +87,11 @@ class Place extends Model implements HasMedia
     public function companies()
     {
         return $this->belongsToMany(Company::class, 'company_places');
+    }
+
+    public function abilities()
+    {
+        return $this->belongsToMany(Ability::class, PlaceHasAbility::class);
     }
 
     public function company()
