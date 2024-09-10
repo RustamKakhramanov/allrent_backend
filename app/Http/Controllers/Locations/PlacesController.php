@@ -41,7 +41,7 @@ class PlacesController extends Controller
     public function show(Company $company, Place $place)
     {
       return fractal($place, new PlaceTransformer)->parseIncludes([
-        'free_today_schedule', 'images', 'company', 'abilities', 'reviews'
+        'free_today_schedule', 'images', 'company', 'abilities', 'reviews', 'contacts'
       ]);
     }
 

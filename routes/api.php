@@ -71,9 +71,9 @@ Route::apiResource('/companies', CompaniesController::class)->only(['index', 'sh
 Route::apiResource('/companies', CompaniesController::class)->middleware(['auth:api'])->except(['index', 'show']);
 
 Route::group(['prefix' => 'companies/{company}'], function () {
+    Route::apiResource('places', PlacesController::class);
 
     Route::middleware(['auth:api'])->group(function () {
-        Route::apiResource('places', PlacesController::class);
 
         Route::group(['prefix' => 'places/{place}'], function () {
             Route::apiResource('schedules', CompanySchedulesController::class)->withoutMiddleware('auth:api');
