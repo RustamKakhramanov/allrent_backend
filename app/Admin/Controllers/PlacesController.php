@@ -157,7 +157,7 @@ class PlacesController extends AdminController
         $form->text('address', 'Адрес');
 
         // draggable sorting since v1.6.12
-        $form->textarea('description', 'Описание');
+        $form->ckeditor('description', 'Описание');
 
         $form->embeds('coordinates', 'Координаты',  function ($form) {
 
@@ -212,7 +212,7 @@ class PlacesController extends AdminController
             $form->divider();
         });
 
-        $form->multipleSelect('abilities','Доп. услуги')->options(Ability::all()->pluck('name','id'));
+        $form->multipleSelect('abilities', 'Доп. услуги')->options(Ability::all()->pluck('name', 'id'));
 
         $form->saving(function (Form $form) {
 
