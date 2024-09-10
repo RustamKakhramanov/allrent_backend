@@ -7,6 +7,7 @@ use App\Repositories\Repository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use App\Models\Record\Rent;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property Rent $model
@@ -18,10 +19,12 @@ class RentRepository extends Repository
         return $rent;
     }
 
-    public function hasAtDay(Carbon $date, int $userId, int $count = 0)
+    public function hasAtDay(Carbon $date, int $userId, int $count = 0, ?MorphMany $query = null)
     {
-        return $this
-            ->query()
+        $query = $query ?? $this->query();
+
+        return
+            $query
             ->where('user_id', $userId)
             ->whereDay('scheduled_at', $date->day)
             ->whereMonth('scheduled_at', $date->month)

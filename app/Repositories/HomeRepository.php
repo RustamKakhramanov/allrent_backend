@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTOs\HomeDTO;
 use App\Enums\HomePageEnum;
+use App\Models\Company\Company;
 use App\Repositories\Company\CompanyRepository;
 use App\Repositories\Location\PlaceRepository;
 use Illuminate\Support\Collection;
@@ -13,9 +14,9 @@ class HomeRepository
     private Collection $data;
     protected string $type;
 
-    public static function parse(HomePageEnum $type): HomeDTO
+    public static function parse(HomePageEnum $type, $additional = []): HomeDTO
     {
-        return (new static($type))->getAllData();
+        return (new static($type))->getAllData($additional);
     }
 
     public function __construct(HomePageEnum $type)
@@ -25,14 +26,14 @@ class HomeRepository
     }
 
 
-    public function getAllData()
+    public function getAllData($additional)
     {
         switch ($this->type) {
             case HomePageEnum::Company():
-                $this->setCompanyData();
+                $this->setCompanyData($additional);
                 break;
             case HomePageEnum::Place():
-                $this->setPlaceData();
+                $this->setPlaceData($additional);
                 break;
         }
 
@@ -44,8 +45,12 @@ class HomeRepository
         $this->data = $this->data->merge(['company' => CompanyRepository::first()]);
     }
 
-    protected function setPlaceData()
+    protected function setPlaceData($additional = [])
     {
-        $this->data = $this->data->merge(['place' => PlaceRepository::where('id', 1)->first()]);
+        if (isset($additional['place_slug']) && isset($additional['company_slug'])) {
+            $place  = PlaceRepository::whereSlug($additional['place_slug'])->whereHas('company', fn($q) => $q->where('slug', $additional['company_slug']))->first();
+        }
+
+        $this->data = $this->data->merge(['place' => $place ?? PlaceRepository::where('id', 1)->first()]);
     }
 }

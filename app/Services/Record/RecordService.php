@@ -6,6 +6,8 @@ use App\Models\Location\Place;
 use App\Repositories\Location\PlaceRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Repositories\Record\RentRepository;
+use App\Events\RecordCreated;
+use App\Models\Record\Rent;
 
 class RecordService
 {
@@ -16,7 +18,7 @@ class RecordService
     public function handle(Place $place, array $requestData)
     {
         $date =  cparse($requestData['scheduled_at']);
-        if ($this->rentRepository->hasAtDay($date, auth()->user()->id, static::ALLOW_RENTS_COUNT)) {
+        if ($this->rentRepository->hasAtDay($date, auth()->user()->id, static::ALLOW_RENTS_COUNT, $place->rents())) {
             throw new HttpException(400, 'У вас уже имеется более одной записи в этот день');
         }
 
@@ -32,10 +34,17 @@ class RecordService
 
         $requestData['amount'] = $schedule->price->value;
 
-        return [
+        $data = [
+            'user_id' => auth()->user()->id,
             'rentable_id' => $place->id,
             'rentable_type' => $place::class,
             ...$requestData
         ];
+
+        $rent =  Rent::create($data);
+
+        event(new RecordCreated($rent));
+
+        return $rent;
     }
 }

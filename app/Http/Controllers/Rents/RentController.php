@@ -28,7 +28,7 @@ class RentController extends Controller
     {
         $data = app(RecordService::class)->handle($place, $request->validated());
 
-        return fractal(Rent::create($data), new RentTransformer);
+        return fractal($data, new RentTransformer);
     }
 
 
