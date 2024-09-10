@@ -33,6 +33,8 @@ services:
             - ./:/var/www/html
             - ./docker/nginx/conf.d:/etc/nginx/conf.d
             - ./docker/nginx/ssl:/etc/nginx/ssl
+            - /etc/letsencrypt/live/allrent.kz:/etc/letsencrypt/live/allrent.kz
+            - /etc/letsencrypt/archive/allrent.kz:/etc/letsencrypt/archive/allrent.kz
         ports:
             - "${APP_PORT:-443}:443"
             # - "443:443"
