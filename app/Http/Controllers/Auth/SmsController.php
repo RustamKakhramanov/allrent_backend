@@ -23,9 +23,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SmsController extends Controller
 {
-    public function __construct(protected SmsInterface $service)
-    {
-    }
+    public function __construct(protected SmsInterface $service) {}
 
     protected function getUser($phone): User
     {
@@ -71,7 +69,7 @@ class SmsController extends Controller
         $code = $user->generateAuthCode();
 
         if (App::isProduction()) {
-            $this->service->send($user->phone, "Ваш проверочный код: {$code}");
+            $this->service->send($user->phone, "Record Ваш проверочный код: {$code}");
         }
     }
 }
